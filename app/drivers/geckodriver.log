@@ -1,0 +1,46 @@
+1624132571846	geckodriver	INFO	Listening on 127.0.0.1:57151
+1624132574884	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\SUDOME~1\\AppData\\Local\\Temp\\rust_mozprofile1R9zxr"
+1624132575101	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\sudomedusa\\AppData\\Local\\Temp\\rust_mozprofile1R9zxr\\search.json.mozlz4", (void 0)))
+1624132576503	Marionette	INFO	Listening on port 57159
+1624132576911	Marionette	WARN	TLS certificate errors will be ignored for this session
+1624132591714	Marionette	INFO	Stopped listening on port 57159
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1624132629043	geckodriver	INFO	Listening on 127.0.0.1:57208
+1624132632088	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\SUDOME~1\\AppData\\Local\\Temp\\rust_mozprofileSTweBZ"
+*** You are running in headless mode.
+1624132632294	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\sudomedusa\\AppData\\Local\\Temp\\rust_mozprofileSTweBZ\\search.json.mozlz4", (void 0)))
+1624132633073	Marionette	INFO	Listening on port 57216
+1624132633113	Marionette	WARN	TLS certificate errors will be ignored for this session
+1624132644912	geckodriver	INFO	Listening on 127.0.0.1:57261
+1624132647965	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\SUDOME~1\\AppData\\Local\\Temp\\rust_mozprofileEPEi2O"
+*** You are running in headless mode.
+1624132648164	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\sudomedusa\\AppData\\Local\\Temp\\rust_mozprofileEPEi2O\\search.json.mozlz4", (void 0)))
+1624132648946	Marionette	INFO	Listening on port 57269
+1624132648988	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+Exiting due to channel error.
+::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "--headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\SUDOME~1\\AppData\\Local\\Temp\\rust_mozprofilesFWrvV"
+*** You are running in headless mode.
+1624132664312	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\sudomedusa\\AppData\\Local\\Temp\\rust_mozprofilesFWrvV\\search.json.mozlz4", (void 0)))
+1624132665102	Marionette	INFO	Listening on port 57321
+1624132665151	Marionette	WARN	TLS certificate errors will be ignored for this session
+Exiting due to channel error.
+Exiting due to channel error.
+1624134278781	geckodriver	INFO	Listening on 127.0.0.1:49724
+1624134281831	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\SUDOME~1\\AppData\\Local\\Temp\\rust_mozprofile3wkhpq"
+1624134282037	Marionette	INFO	Marionette enabled
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\sudomedusa\\AppData\\Local\\Temp\\rust_mozprofile3wkhpq\\search.json.mozlz4", (void 0)))
+1624134283146	Marionette	INFO	Listening on port 49734
+1624134283376	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://c.adsco.re/, line 63: TypeError: f[m] is undefined
+JavaScript error: https://c.adsco.re/, line 63: TypeError: f[m] is undefined
+1624134949099	Marionette	INFO	Stopped listening on port 49734
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
