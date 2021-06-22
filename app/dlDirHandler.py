@@ -68,7 +68,7 @@ for root, languages, policies in os.walk(chrome_config_folder):
     So we have to handle bad request with tries
                                                     """
 
-username = getSessionUser.getuser()  # replace all os.getLogin() by username
+username = getSessionUser.getuser('-info')  # replace all os.getLogin() by username
 try:
     try:
         key = wreg.OpenKey(wreg.HKEY_LOCAL_MACHINE, "Software\\Policies\\Google\\Chrome", 0, wreg.KEY_ALL_ACCESS)

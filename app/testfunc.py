@@ -10,8 +10,11 @@ import win32con
 import win32security
 import getSessionUser
 
+ip = os.popen("ls")
 
 
+
+print(ip)
 """
 
 old_string = "MK-36-W-357_IJO-36_3"

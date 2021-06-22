@@ -1,17 +1,17 @@
 import profile
 
 from selenium import webdriver
+"""
 from selenium.webdriver import FirefoxProfile
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.webdriver import findElements
+#from selenium.webdriver import findElements
 
 
 
-profile = webdriver.FirefoxProfile()
+#profile = webdriver.FirefoxProfile()
+#download = webdriver.(By.XPath("//a[.='ダウンロード']"));
 
-download = webdriver.(By.XPath("//a[.='ダウンロード']"));
-
-webdriver.
+#webdriver.
 
 #profile.set_preference("browser.download.folderlist", 2)
 #profile.set_preference("browser.download.dir", "C:\\Users\\julie\\Desktop")
@@ -27,17 +27,11 @@ driver = webdriver.Firefox(firefox_profile=profile)
 driver.get("https://www.mediafire.com/file/rj5j4127ax7d4t9/SavedGames.rar/file")
 
 
-
-
-"""
 options = FirefoxOptions()
 options.add_argument("--headless")
 driver = webdriver.Firefox(options=options)
 driver.get("https://pythonbasics.org")
-"""
 
-
-"""
 driver = webdriver.Firefox()
 driver.get("https://dev.to")
 
