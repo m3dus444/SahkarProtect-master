@@ -11,8 +11,10 @@ import win32security
 import getSessionUser
 import time
 from ctypes import windll
-a = 11
-print(a & 1)
+
+
+
+
 
 
 
