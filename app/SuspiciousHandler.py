@@ -95,7 +95,7 @@ def getdownloadfolder():
 folder_to_track = getdownloadfolder()
 folder_destination = "C:/users/" + getSessionUser.getuser(0) + "/Desktop/test"
 
-"""
+
 event_handler = HandleSuspicious()
 observer = Observer()
 observer.schedule(event_handler, path=folder_to_track, recursive=True)
@@ -107,4 +107,3 @@ try:
 except KeyboardInterrupt:
     observer.stop()
 observer.join()
-"""

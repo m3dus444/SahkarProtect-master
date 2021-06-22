@@ -9,8 +9,10 @@ import win32api
 import win32con
 import win32security
 import getSessionUser
+record_deviceBit =
 
-ip = os.popen("ls")
+
+record_deviceBit & 1
 
 
 
