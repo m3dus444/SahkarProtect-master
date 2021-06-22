@@ -9,14 +9,14 @@ import win32api
 import win32con
 import win32security
 import getSessionUser
-record_deviceBit =
+import time
+from ctypes import windll
+a = 11
+print(a & 1)
 
 
-record_deviceBit & 1
 
 
-
-print(ip)
 """
 
 old_string = "MK-36-W-357_IJO-36_3"
