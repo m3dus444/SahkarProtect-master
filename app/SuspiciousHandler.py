@@ -10,17 +10,23 @@ import ctypes
 import json
 import shutil
 import getSessionUser
+import quanrtineHandler
 
 
 class HandleSuspicious(FileSystemEventHandler):
 
     def on_modified(self, event):
+        """ This function run itself when the folder/subfolder/file in folder is moved in/ modified"""
 
         for filename in os.listdir(folder_to_track):
             i = 1
-            if filename != 'test':
+            if filename != 'test' and '.skp' not in filename:
                 new_name = filename
+
+                """ encryption before moving to server folder"""
                 print("New suspect file is scuffed : " + filename)
+                quanrtineHandler.encrypt(folder_to_track, filename)
+
                 file_exists = os.path.isfile(folder_destination + '/' + new_name)
                 while file_exists:
                     i += 1
@@ -37,7 +43,6 @@ class HandleSuspicious(FileSystemEventHandler):
                         new_name = os.path.splitext(new_name)[0] + "_" + str(i) + \
                                    os.path.splitext(new_name)[1]
 
-                    #print("this is the new name with a number !  : " + new_name + '\n')
                     file_exists = os.path.isfile(folder_destination + "/" + new_name)
                     if i >= 20:
                         break
@@ -50,7 +55,9 @@ class HandleSuspicious(FileSystemEventHandler):
 
     def on_deleted(self, event):
 
-        """ If client delete download folder, it recreate itself automatically and restart the script"""
+        """ If client delete download folder, it recreate itself automatically and restart the script
+            Plus, it also run itself once a file is sent for DMA in on_modified function because
+            it deletes the file while moving it to server folder"""
 
         try:
             time.sleep(0.1)
@@ -60,7 +67,7 @@ class HandleSuspicious(FileSystemEventHandler):
             print(" Folder restaured, restarting process... ")
             exec(open("SuspiciousHandler.py").read())
         except:
-            print("Your file has been sent for DMA ")
+            print("Your file has been sent for DMA. You'll get it back in /Documents/ once checked.")
 
     def on_moved(self, event):
         print("moved")
@@ -83,7 +90,7 @@ def getdownloadfolder():
         import _winreg as wreg
     else:
         import winreg as wreg
-    key = key = wreg.OpenKey(wreg.HKEY_LOCAL_MACHINE, "Software\\Policies\\Google\\Chrome", 0, wreg.KEY_ALL_ACCESS)
+    key = key = wreg.OpenKey(wreg.HKEY_LOCAL_MACHINE, "Software\\Policies\\Google\\Chrome", 0, wreg.KEY_READ)
     return wreg.QueryValueEx(key, 'DefaultDownloadDirectory')[0]
 
 
@@ -93,8 +100,8 @@ def getdownloadfolder():
 """ MAIN """
 
 folder_to_track = getdownloadfolder()
-folder_destination = "C:/users/" + getSessionUser.getuser(0) + "/Desktop/test"
-
+folder_destination = r"C:\users\\" + getSessionUser.getuser(0) + r"\Desktop\test"
+folder_device = 'device'
 
 event_handler = HandleSuspicious()
 observer = Observer()

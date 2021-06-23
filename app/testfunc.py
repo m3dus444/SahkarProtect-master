@@ -12,6 +12,16 @@ import getSessionUser
 import time
 from ctypes import windll
 
+root = r"C:\Users\julie\PycharmProjects\SahkarProtect-master\app\encryption"
+
+
+for filename in os.listdir(root):
+    print(filename)
+
+
+
+
+
 
 
 

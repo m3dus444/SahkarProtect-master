@@ -23,28 +23,28 @@
     4th loop: 0001 --> 0000 ---> D
 
     To do the AND operator, we take the last two bits. So for first loop
-    aka letter A, it'll return 0, for letter B as well and C and D it returns 1.
-    """
+    aka letter A, it'll return 0, for letter B as well and C and D it returns 1. """
 
 
 import os
 import time
+import getSessionUser
 from ctypes import windll
 
 
 uppercase_letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
                     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-def get_driveStatus():
+
+
+def get_drive_status():
     devices = []
     record_deviceBit = windll.kernel32.GetLogicalDrives()  # The GetLogicalDrives function retrieves a bitmask for devices
+
     for label in uppercase_letters:
-        print("the record : ", record_deviceBit)
         """ We check if bitmask AND 1 returns 1 ==> both bits are 1"""
+
         if record_deviceBit & 1:
-            print("yes: ", record_deviceBit & 1) # if it is, we add the correspondant label
-            devices.append(label)
-        else:
-            print(" no: ", record_deviceBit & 1)
+            devices.append(label) # if it is, we add the correspondant label
 
         """ If both bits arent 1"""
         record_deviceBit >>= 1
@@ -53,26 +53,24 @@ def get_driveStatus():
     return devices
 
 
-def detect_device():
-    original = set(get_driveStatus())
-    print(original)
+def detect_flash_drive():
+    original = set(get_drive_status())
     print('Detecting...')
-    time.sleep(3)
-    add_device = set(get_driveStatus()) - original
-    subt_device = original - set(get_driveStatus())
+    time.sleep(1.5)
+    add_device = set(get_drive_status()) - original
+    subt_device = original - set(get_drive_status())
 
-    if (len(add_device)):
+    if len(add_device):
         print("There were %d" % (len(add_device)))
         for drive in add_device:
-            print("The drives added: %s." % (drive))
+            print("The drives added: %s." % drive)
 
-    elif (len(subt_device)):
+    elif len(subt_device):
         print("There were %d" % (len(subt_device)))
         for drive in subt_device:
-            print("The drives remove: %s." % (drive))
+            print("The drives remove: %s." % drive)
 
 
-if __name__ == '__main__':
-
+def looking_for_flash_drive():
     while True:
-        detect_device()
+        detect_flash_drive()
