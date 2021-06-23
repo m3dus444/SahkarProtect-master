@@ -12,6 +12,7 @@ import subprocess
 import sys
 import os
 import getSessionUser
+import confHandler
 
 
 def administrator_privilege():
@@ -71,11 +72,12 @@ def set_chrome_corp_mode():
                         policy_src = os.path.join(root, policy)
                         # policy dst is windows policy dir
                         os.popen("copy " + policy_src + " " + policy_definition_folder + r"\\" + policy)
-            return True
+
+            return confHandler.set_chrome_config() #true or false
 
         except:
+            print(r"Couldn't get chrome to corporation mode. Try reinstalling chrome (in C:\ drive)")
             return False
-
 
 
 def set_chrome_reg_keys():
@@ -112,11 +114,13 @@ def set_chrome_reg_keys():
             print("    ", wreg.QueryValueEx(key, 'DownloadDirectory'))
 
             key.Close()
-
-            return True
+            return confHandler.set_regedit_config()
 
         except:
             print(r"/!\ Couldn't access or modify registry :( /!\ ")
             return False
 
 
+""" Local variables """
+
+encryption_folder = os.getcwd() + r"\encryption" + '\\'

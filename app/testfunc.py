@@ -11,25 +11,18 @@ import win32security
 import getSessionUser
 import time
 from ctypes import windll
-
-root = r"C:\Users\julie\PycharmProjects\SahkarProtect-master\app\encryption"
-
-
-for filename in os.listdir(root):
-    print(filename)
-
-
-
-
-
-
-
+import quanrtineHandler
+import USBHandler
 
 
 
 
 
 """
+
+C:\\Users\julie\PycharmProjects\SahkarProtect-master\\app\encryption
+
+
 
 old_string = "MK-36-W-357_IJO-36_3"
 #k = old_string.rfind("_")

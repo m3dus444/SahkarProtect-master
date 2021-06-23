@@ -31,11 +31,6 @@ import time
 import getSessionUser
 from ctypes import windll
 
-
-uppercase_letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-
-
 def get_drive_status():
     devices = []
     record_deviceBit = windll.kernel32.GetLogicalDrives()  # The GetLogicalDrives function retrieves a bitmask for devices
@@ -74,3 +69,9 @@ def detect_flash_drive():
 def looking_for_flash_drive():
     while True:
         detect_flash_drive()
+
+
+""" Local Variabkes"""
+
+uppercase_letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']

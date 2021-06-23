@@ -2,23 +2,24 @@ import os
 from cryptography.fernet import Fernet
 import time
 
-def encrypt(root, filename): #, extensionfile):
+
+def encrypt(root, filename):
+    """ This function encrypt the file creating the quarantine  key
+    in encryption folder. Then it encrypts the file in download folder
+    with '.skp' extension as SuspiciousHandler will not scuff it. """
 
     root = root + r'\\'
-    config_folder = os.getcwd() + r"\encryption" + '\\'
 
-    """ setting up the key used for encryption and decryption"""
+    #  setting up the key used for encryption and decryption
 
-    quarantineKey = Fernet.generate_key()
+    quarantine_key = Fernet.generate_key()
 
-    with open(config_folder + 'quarantineKey_' + filename + '.skk', 'wb') as key:
-        key.write(quarantineKey)
+    with open(encryption_folder + 'quarantineKey_' + filename + '.skk', 'wb') as key:
+        key.write(quarantine_key)
 
-    #with open('mykey.quarantineKey', 'rb') as key:
-    #    quarantineKey = key.read()
-    f = Fernet(quarantineKey) # creating fernet object
+    f = Fernet(quarantine_key)  # creating fernet object
 
-    """ encryption """
+    #  encryption
 
     with open(root + filename, 'rb') as uncrypted_file:
         original_data = uncrypted_file.read()  # uncrypted data stored in RAM
@@ -31,35 +32,28 @@ def encrypt(root, filename): #, extensionfile):
         del encrypted
 
 
-""" decrypt """
+def decrypt(root, filename):
+    """ This function decrypt the file reading the quarantine key written
+        in encryption folder and removes both key and encrypted file"""
 
-
-def decrypt(root, encrypted_filename):
-    config_folder = os.getcwd() + r"\encryption"
     root = root + '\\'
-    config_folder = config_folder + '\\'
 
-    with open(config_folder + 'quarantineKey_' + encrypted_filename + '.skk', 'rb') as key:
-        quarantineKey = key.read()
-        f = Fernet(quarantineKey)
+    with open(encryption_folder + 'quarantineKey_' + filename + '.skk', 'rb') as key:
+        quarantine_key = key.read()
+        f = Fernet(quarantine_key)
 
-    with open(root + encrypted_filename + '.skp', 'rb') as encrypted_file:
+    with open(root + filename + '.skp', 'rb') as encrypted_file:
         encrypted = encrypted_file.read()
 
     decrypted = f.decrypt(encrypted)
 
-    with open(root + encrypted_filename, 'wb') as decrypted_file:
+    with open(root + filename, 'wb') as decrypted_file:
         decrypted_file.write(decrypted)
 
-    os.remove(config_folder + 'quarantineKey_' + encrypted_filename + '.skk')
-    os.remove(root + encrypted_filename + '.skp')
+    #  removing temp files
+    os.remove(encryption_folder + 'quarantineKey_' + filename + '.skk')
+    os.remove(root + filename + '.skp')
 
 
-encry = r"C:\Users\julie\PycharmProjects\SahkarProtect-master\app\encryption"
-filename_toencrypt = "program.exe"
-
-"""
-encrypt(encry, filename_toencrypt)
-time.sleep(5)
-decrypt(encry, filename_toencrypt)
-"""
+""" Local Variables """
+encryption_folder = os.getcwd() + r"\encryption" + '\\'
