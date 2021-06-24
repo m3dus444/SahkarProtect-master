@@ -13,7 +13,7 @@ import time
 from ctypes import windll
 import quanrtineHandler
 import USBHandler
-
+import confHandler
 
 
 

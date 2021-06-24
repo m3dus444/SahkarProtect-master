@@ -48,6 +48,16 @@ def is_regedit_configured():
         dlDirHandler.set_chrome_reg_keys()
 
 
+def set_guinea_pig_config():
+    try:
+        with open(config_folder + 'guinea_pig.txt', 'w') as configfile:
+            print("Successfully created guinea pig file")
+        return True
+    except:
+        print("cannot write configs files. Check chmod on : " + config_folder + " ...")
+        return False
+
+
 """ Local variables """
 
 config_folder = os.getcwd() + r"\configs" + '\\'
