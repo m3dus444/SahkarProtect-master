@@ -16,7 +16,21 @@ import USBHandler
 import confHandler
 
 
+class A(object):
+    def __init__(self, x, b):
+        _x = ''
+        _b = 0
+        self.y = _x
+        self.z = _b
+        print("ta mere je suis" + _x + " et j'ai " + str(_b))
 
+    def method_a(self, foo, t):
+        print(" mon pote est " + foo + "he as " + str(self.z) + "enfants")
+        #print(self.)
+
+a = A('test', 21) # We do not pass any argument to the __init__ method
+#a.method_a('Sailor!', 22)
+a.method_a('sailor', 22)
 
 """
 

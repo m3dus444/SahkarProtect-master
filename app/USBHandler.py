@@ -31,6 +31,7 @@ import time
 import getSessionUser
 from ctypes import windll
 
+
 def get_drive_status():
     devices = []
     record_deviceBit = windll.kernel32.GetLogicalDrives()  # The GetLogicalDrives function retrieves a bitmask for devices
