@@ -38,3 +38,5 @@ def getuser(details):
         else:
             print("You're probably ran this script in administrator mode. Try to run this script is user mode.")
 
+if __name__ == '__main__':
+    getuser(0)
