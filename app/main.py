@@ -24,6 +24,7 @@ import runSript
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import quanrtineHandler
+import server
 
 def createCMD(target_dir):
     CMD = r'"D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe" C:/Users/julie/PycharmProjects/SahkarProtect-master/app/SuspiciousHandlerAlone.py ' + target_dir + r" C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\uploadServer"
@@ -44,6 +45,8 @@ class B(A):
 
 """ Checking configuration"""
 
+print(getSessionUser.getuser('--info'))
+time.sleep(1)
 chrome_configured_state = confHandler.is_chrome_configured()
 regedit_configured_state = confHandler.is_regedit_configured()
 configuration_tries = 0
@@ -100,6 +103,7 @@ while True:
             print("TEST PASSED")
             async_returns_USB_Handler = pool_USB_handler.apply_async(USBHandler.looking_for_flash_drive)
         time.sleep(3)
+
     except KeyboardInterrupt:
         pool_USB_handler.terminate()
         pool_suspicious_handler.terminate()

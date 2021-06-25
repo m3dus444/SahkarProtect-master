@@ -4,7 +4,6 @@ import json
 import os
 import time
 
-
 UPLOAD_FOLDER = "./uploadServer/"
 CMD_BASE = "python ./VxAPI/vxapi.py"
 ARGUMENTS = "--no-share-third-party 1 --allow-community-access 0"
@@ -63,7 +62,10 @@ def sandbox_file(path):
 
 
 def executeScan(cmd_arguments):
-    cmd = CMD_BASE + cmd_arguments
+
+
+<< << << < HEAD
+   cmd = CMD_BASE + cmd_arguments
     result = subprocess.run(cmd, capture_output=True, text=True)
     stdout = result.stdout
     stderr = result.stderr
@@ -71,7 +73,21 @@ def executeScan(cmd_arguments):
     print(stderr)
     scan_id = json.loads(stdout)["id"]
     print(scan_id)
-    job_done = False
+== == == =
+   try:
+        cmd = CMD_BASE + cmd_arguments
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        stdout = result.stdout
+        stderr = result.stderr
+        print(stdout)
+        print(stderr)
+        result = json.loads(result.decode('utf-8'))
+        #scan_id = json.loads(stdout)
+        scan_id = scan_id["id"]
+    except json.JSONDecodeError:
+        print(stdout)
+>>>>>> > ff9c9051bd4e024bd5efcb6c443a6965607c45ae
+   job_done = False
     timeout = 0
     while (job_done is False and timeout < 15):
         time.sleep(5)
