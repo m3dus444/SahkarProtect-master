@@ -1,0 +1,1 @@
+regedit_policies_config = 1;
