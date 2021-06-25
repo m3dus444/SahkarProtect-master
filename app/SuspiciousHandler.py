@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+#! /usr/bin/env python3
 
 from time import sleep
 from watchdog.observers import Observer
@@ -12,6 +13,8 @@ import shutil
 import getSessionUser
 import quanrtineHandler
 import server
+import asyncio
+import subprocess
 
 class HandleSuspicious(FileSystemEventHandler):
     def __init__(self, folder_to_track, folder_destination):
@@ -59,8 +62,12 @@ class HandleSuspicious(FileSystemEventHandler):
                     os.rename(src, dst)
                     time.sleep(0.2)
                     """ SENDING FOR DMA"""
-                    server.execute_analysis("quick_scan_file", filename=new_name)
-                    server.execute_analysis("sandbox_file", filename=new_name)
+                    #sp1 = subprocess.Popen(server.execute_analysis("quick_scan_file", filename=new_name))
+                    sp1 = subprocess.Popen("python server.py", shell=True, stdin=None, stdout=subprocess.PIPE)
+                    print("not blocked")
+
+                    #sp2 = subprocess.Popen(server.execute_analysis("sandbox_file", filename=new_name))
+
                     print("not blocked")
         else:
             print("Scrript noticed path dir is unreachable ! \r")

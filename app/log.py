@@ -8,14 +8,14 @@ import socket
 
 # path=r'C:\Users\Utilisteur\Desktop\downtest'
 # directory=os.listdir(path)
-filename = r'C:\Users\Utilisteur\Desktop\downtest\ecocompare.jar'
+#filename = r'C:\Users\Utilisteur\Desktop\downtest\ecocompare.jar'
 
 
 # function which creates log right after download
 def loger(filename):
     fich = filename.split("\\")
     name, ext = os.path.splitext(filename)
-    *chemin, nom = splitext(filename)
+    chemin, nom = splitext(filename)
     hostname = socket.gethostname()
     local_ip = socket.gethostbyname(hostname)
 
@@ -25,7 +25,7 @@ def loger(filename):
         stats.st_ctime), "date de modification": time.ctime(stats.st_mtime), "type": ext}
     print(d)
 
-    with open("sakharlog.txt", "a") as f:
+    with open("/logs/sakharlog.txt", "a") as f:
         dat = datetime.now()
         info = str(d)
         f.write(str(dat)+info+"\n")
