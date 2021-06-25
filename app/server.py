@@ -3,6 +3,7 @@ import subprocess
 import json
 import os
 import time
+import log
 
 UPLOAD_FOLDER = "./uploadServer/"
 CMD_BASE = "python ./VxAPI/vxapi.py"
@@ -12,12 +13,15 @@ ARGUMENTS = "--no-share-third-party 1 --allow-community-access 0"
 def execute_analysis(function_name, url=None, filename=None, root=None):
     if (function_name == "quick_scan_file" or function_name == "sandbox_file"):
         path = UPLOAD_FOLDER + filename
-        result = globals()[function_name](path)#execution of function name
+        log.log_init(filename)
+        result = globals()[function_name](path)
     else:
         result = globals()[function_name](url)
         print(url)
     if (result == "malicious" or result == "suspicious" or result == "timeout exceeded"):
+        log.log_analysed(filename, 1)
         return 1
+    log.log_analysed(filename, 0)
     return 0
 
 
@@ -68,7 +72,7 @@ def executeScan(cmd_arguments):
     stderr = result.stderr
     print(stdout)
     print(stderr)
-    stdout = stdout[:-4] #removes wrong data from json
+    stdout = stdout[:-4]
     scan_id = json.loads(stdout)["id"]
     print(scan_id)
     job_done = False
@@ -104,8 +108,8 @@ def executeSandbox(cmd_arguments):
         if (getSandboxState(job_id)):
             job_done = True
         timeout += 1
-    if (timeout >= 40):
-        return "Sandbox timeout exceeded"
+    if (timeout >= 5):
+        return "timeout exceeded"
     return getSandboxSummary(job_id)
 
 
@@ -144,8 +148,9 @@ def getScanResult(scan_id):
 
 if __name__ == "__main__":
     # result = execute_analysis(function_name = "quick_scan_url", url = "https://efreidoc.fr/")
-    # result = execute_analysis(function_name="quick_scan_url_file", url = "https://efreidoc.fr/L3/Chinois/CE/20XX-XX.CE.sujet.chin.pdf")
-
+    """
+    result = execute_analysis(function_name="quick_scan_url_file", url = "https://efreidoc.fr/L3/Chinois/CE/20XX-XX.CE.sujet.chin.pdf")
+    """
     result = execute_analysis(
-        "quick_scan_file", filename="liste_classement_ecn_20210623_1042.pdf")
+        "quick_scan_file", filename="deprecated-list.html")
     print(result)

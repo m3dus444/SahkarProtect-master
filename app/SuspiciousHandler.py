@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+#! /usr/bin/env python3
 
 from time import sleep
 from watchdog.observers import Observer
@@ -13,6 +14,8 @@ import getSessionUser
 import quanrtineHandler
 from multiprocessing.pool import ThreadPool
 import server
+import asyncio
+import subprocess
 
 class HandleSuspicious(FileSystemEventHandler):
     def __init__(self, folder_to_track, folder_destination, folder_documents, scuffed_files, pool_hybrid_analysis, async_returns_hybrid):
