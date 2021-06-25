@@ -14,7 +14,7 @@ import json
 import white
 import subprocess
 import multiprocessing as mp
-import SuspiciousHandler
+#import SuspiciousHandler
 from ctypes import windll
 #from app import white
 import concurrent.futures
@@ -68,6 +68,10 @@ def function():
     #return verdict
 #function()
 
+a = [0]*5
+for i in range(0,len(a)):
+    a[i] = 'a'
+print(a)
 
 #CMD = r'"D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe" C:/Users/julie/PycharmProjects/SahkarProtect-master/app/SuspiciousHandlerAlone.py C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\thrTestDir C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\testDir'
 
@@ -89,12 +93,15 @@ print(output)
 
 
 """
-from subprocess import Popen, PIPE
+SUBPROCESSES:
 
-p = Popen(["python", "respotify.py", "john", "doe"], stdin=PIPE, stdout=PIPE)
-input = "search Wrecking Ball\n" + "play 1\n"
-output = p.communicate(input)[0]
-
+# runSript.runcommand(createCMD(new_flashdrive))#can't continue code
+# pool_test.apply_async(runSript.runcommand, createCMD(new_flashdrive)) # can't open observer
+# subprocess.run(runSript.runcommand(createCMD(new_flashdrive)), capture_output=True, text=True)#can't continue code
+# os.system('cmd /k ' + createCMD(new_flashdrive)) #can't continue code
+# pool_test.apply_async(os.system, 'cmd /k ' + createCMD(new_flashdrive)) #can't open observer
+# os.popen(createCMD(new_flashdrive)) # returns invalid arg ov argv lmao
+# subprocess.run("os.system('cmd /k '" + createCMD(new_flashdrive), capture_output=False, text=True) #fichier specifie introuvable (lequel ? )
 
 
 parser = argparse.ArgumentParser(prefix_chars='-+/', description="This is to demonstrate multiple prefix characters")

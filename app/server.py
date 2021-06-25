@@ -12,7 +12,7 @@ ARGUMENTS = "--no-share-third-party 1 --allow-community-access 0"
 def execute_analysis(function_name, url=None, filename=None, root=None):
     if (function_name == "quick_scan_file" or function_name == "sandbox_file"):
         path = UPLOAD_FOLDER + filename
-        result = globals()[function_name](path)
+        result = globals()[function_name](path)#execution of function name
     else:
         result = globals()[function_name](url)
         print(url)
@@ -68,7 +68,7 @@ def executeScan(cmd_arguments):
     stderr = result.stderr
     print(stdout)
     print(stderr)
-    stdout = stdout[:-4]
+    stdout = stdout[:-4] #removes wrong data from json
     scan_id = json.loads(stdout)["id"]
     print(scan_id)
     job_done = False
@@ -104,8 +104,8 @@ def executeSandbox(cmd_arguments):
         if (getSandboxState(job_id)):
             job_done = True
         timeout += 1
-    if (timeout >= 5):
-        return "timeout exceeded"
+    if (timeout >= 40):
+        return "Sandbox timeout exceeded"
     return getSandboxSummary(job_id)
 
 

@@ -11,12 +11,17 @@ import json
 import shutil
 import getSessionUser
 import quanrtineHandler
+from multiprocessing.pool import ThreadPool
 import server
 
 class HandleSuspicious(FileSystemEventHandler):
-    def __init__(self, folder_to_track, folder_destination):
+    def __init__(self, folder_to_track, folder_destination, folder_documents, scuffed_files, pool_hybrid_analysis, async_returns_hybrid):
         self.folder_to_track = folder_to_track
         self.folder_destination = folder_destination
+        self.folder_documents = folder_documents
+        self.scuffed_files = scuffed_files
+        self.pool_hybrid_analysis = pool_hybrid_analysis
+        self.async_returns_hybrid = async_returns_hybrid
         print("A new watchdog is awake !\r")
 
     def on_modified(self, event):
@@ -29,7 +34,7 @@ class HandleSuspicious(FileSystemEventHandler):
 
                     """ encryption before moving to server folder"""
                     print("New suspect file is scuffed : " + filename)
-                    quanrtineHandler.encrypt(self.folder_to_track, filename)
+                    #quanrtineHandler.encrypt(self.folder_to_track, filename)
 
                     file_exists = os.path.isfile(self.folder_destination + '/' + new_name)
                     while file_exists:
@@ -50,7 +55,9 @@ class HandleSuspicious(FileSystemEventHandler):
                         file_exists = os.path.isfile(self.folder_destination + "/" + new_name)
                         if i >= 20:
                             break
-
+                    self.scuffed_files.append(new_name)
+                    print(self.scuffed_files)
+                    quanrtineHandler.encrypt(self.folder_to_track, filename, new_name)
                     src = self.folder_to_track + "/" + filename
                     dst = self.folder_destination + "/" + new_name
                     # print("this is the dst name : " + dst + '\n')
@@ -59,13 +66,25 @@ class HandleSuspicious(FileSystemEventHandler):
                     os.rename(src, dst)
                     time.sleep(0.2)
                     """ SENDING FOR DMA"""
-                    server.execute_analysis("quick_scan_file", filename=new_name)
-                    server.execute_analysis("sandbox_file", filename=new_name)
+                    self.async_returns_hybrid.append(self.pool_hybrid_analysis.apply_async(server.execute_analysis, ("quick_scan_file", None, new_name)))
+                    if self.async_returns_hybrid[0].ready():
+                        keepquarantine = self.async_returns_hybrid[0].get()
+                        print("One of your file has been analysed\r")
+                        if keepquarantine == 0:
+                            quanrtineHandler.decrypt(self.folder_to_track, self.scuffed_files[0], self.folder_documents)
+                        elif keepquarantine == 1:
+                            print("Your file %s has been revealed to be a Ransomware/Malware !\r")
+                            os.remove(getdownloadfolder() + r"\\" + self.scuffed_files[0])
+                            os.remove(os.getcwd()+r"\\encryption\quarantineKey_" + self.scuffed_files[0] + '.skk')
+                            quanrtineHandler.encrypt(os.getcwd()+r"\\uploadServer\\", self.scuffed_files[0], self.scuffed_files[0])
+                        self.scuffed_files.remove(0)
+                        self.async_returns_hybrid.remove(0)
+                    #server.execute_analysis("quick_scan_file", filename=new_name)
+                    #server.execute_analysis("sandbox_file", filename=new_name)
                     print("not blocked")
         else:
-            print("Scrript noticed path dir is unreachable ! \r")
+            print("Given script dir is unreachable for watchdog ! \r")
             self.on_deleted(self)
-
     def on_deleted(self, event):
 
         """ If client delete download folder, it recreate itself automatically and restart the script
@@ -111,16 +130,16 @@ def getdownloadfolder():
 
 
 
-def start_observer(folder_to_track, folder_destination):
+def start_observer(folder_to_track, folder_destination, folder_documents):
 
     """ MAIN """
-
-    event_handler = HandleSuspicious(folder_to_track, folder_destination)
-    #print("Looking for suspicious files on : %s...\r" % folder_to_track)
+    #n = 5
+    scuffed_files = []
+    pool_hybrid_analysis = ThreadPool(processes=5)
+    async_returns_hybrid = []
+    event_handler = HandleSuspicious(folder_to_track, folder_destination, folder_documents, scuffed_files, pool_hybrid_analysis, async_returns_hybrid)
     observer = Observer()
-    #print("we get trought oberserver")
     observer.schedule(event_handler, path=folder_to_track, recursive=True)
-    #print("we get trought schedule")
     try:
         observer.start()
         print("we get trought start")
