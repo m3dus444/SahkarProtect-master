@@ -13,6 +13,7 @@ def set_chrome_config(value):
 
 
 def is_chrome_configured():
+    print("config", config_folder)
     try:
         with open(config_folder + 'chrome_setup.txt', 'r', encoding='utf-8') as configfile:
             if '1' in configfile.read():
