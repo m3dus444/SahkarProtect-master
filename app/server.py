@@ -13,17 +13,15 @@ ARGUMENTS = "--no-share-third-party 1 --allow-community-access 0"
 def execute_analysis(function_name, url=None, filename=None, root=None):
     if (function_name == "quick_scan_file" or function_name == "sandbox_file"):
         path = UPLOAD_FOLDER + filename
-        log.loger(path)
+        log.log_init(filename)
         result = globals()[function_name](path)
     else:
         result = globals()[function_name](url)
         print(url)
     if (result == "malicious" or result == "suspicious" or result == "timeout exceeded"):
-        path = UPLOAD_FOLDER + filename
-        log.logeranalysed(path, 1)
+        log.log_analysed(filename, 1)
         return 1
-    path = UPLOAD_FOLDER + filename
-    log.logeranalysed(path, 0)
+    log.log_analysed(filename, 0)
     return 0
 
 

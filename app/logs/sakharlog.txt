@@ -1,0 +1,3 @@
+2021-06-25 16:27:53.485801{'ip address': '172.16.0.4', 'nom': 'readme2_md.md', 'taille': 3288, 'date de creation': 'Fri Jun 25 16:27:53 2021', 'date de modification': 'Thu Jun 10 14:04:22 2021'}
+2021-06-25 16:28:03.570559{'ip address': '172.16.0.4', 'nom': 'readme2_md.md', 'result': 0}
+2021-06-25 16:28:03.570559{'ip address': '172.16.0.4', 'nom': 'readme2_md.md', 'taille': 3288, 'date de creation': 'Fri Jun 25 16:27:53 2021', 'date de modification': 'Thu Jun 10 14:04:22 2021'}
