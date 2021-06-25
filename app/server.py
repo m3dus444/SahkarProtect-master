@@ -9,42 +9,42 @@ CMD_BASE = "python ./VxAPI/vxapi.py"
 ARGUMENTS = "--no-share-third-party 1 --allow-community-access 0"
 
 
-async def request(function_name, url=None, filename=None, root=None):
+def execute_analysis(function_name, url=None, filename=None, root=None):
     if (function_name == "quick_scan_file" or function_name == "sandbox_file"):
         path = UPLOAD_FOLDER + filename
-        result = await function_name(path)
+        result = locals()[function_name](path)
     else:
-        result = await function_name(url)
+        result = eval(function_name(url))
     if (result == "malicious" or result == "suspicious" or result == "timeout exceeded"):
         return 1
     return 0
 
 
-async def quick_scan_url(url):
+def quick_scan_url(url):
     cmd_arguments = " scan_url_for_analysis " + ARGUMENTS + " " + \
         url + " scan_urlscanio"
     return executeScan(cmd_arguments)
 
 
-async def sandbox_url(url):
+def sandbox_url(url):
     cmd_arguments = " submit_url_for_analysis " + ARGUMENTS + " " + \
         url + " 120"
     return executeSandbox(cmd_arguments)
 
 
-async def quick_scan_url_file(url_file):
+def quick_scan_url_file(url_file):
     cmd_arguments = " scan_url_to_file " + ARGUMENTS + " " + \
         url_file + " scan_metadefender"
     return executeScan(cmd_arguments)
 
 
-async def sandbox_url_file(url_file):
+def sandbox_url_file(url_file):
     cmd_arguments = " submit_url_to_file " + ARGUMENTS + " " + \
         url_file + " 120"
     return executeSandbox(cmd_arguments)
 
 
-async def quick_scan_file(path):
+def quick_scan_file(path):
     cmd_arguments = " scan_file " + ARGUMENTS + " " + \
         path + " scan_metadefender"
     result = executeScan(cmd_arguments)
@@ -52,7 +52,7 @@ async def quick_scan_file(path):
     return result
 
 
-async def sandbox_file(path):
+def sandbox_file(path):
     cmd_arguments = " submit_file " + ARGUMENTS + " " + \
         path + " 120"
     verdict = executeSandbox(cmd_arguments)
@@ -60,7 +60,7 @@ async def sandbox_file(path):
     return verdict
 
 
-async def executeScan(cmd_arguments):
+def executeScan(cmd_arguments):
     cmd = CMD_BASE + cmd_arguments
     result = subprocess.run(cmd, capture_output=True, text=True)
     stdout = result.stdout
@@ -129,3 +129,9 @@ def getScanResult(scan_id):
     status = status[0]
     status = status["status"]
     return status
+
+
+if __name__ == "__main__":
+    result = execute_analysis(
+        function_name="quick_scan_url", url="https: // efreidoc.fr/")
+    print(result)
