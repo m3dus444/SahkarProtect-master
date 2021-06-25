@@ -32,11 +32,12 @@ def encrypt(root, filename):
         del encrypted
 
 
-def decrypt(root, filename):
+def decrypt(root, filename, dst):
     """ This function decrypt the file reading the quarantine key written
         in encryption folder and removes both key and encrypted file"""
 
     root = root + '\\'
+    dst = dst + '\\'
 
     with open(encryption_folder + 'quarantineKey_' + filename + '.skk', 'rb') as key:
         quarantine_key = key.read()
@@ -47,7 +48,7 @@ def decrypt(root, filename):
 
     decrypted = f.decrypt(encrypted)
 
-    with open(root + filename, 'wb') as decrypted_file:
+    with open(dst + filename, 'wb') as decrypted_file:
         decrypted_file.write(decrypted)
 
     #  removing temp files

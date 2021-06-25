@@ -50,9 +50,9 @@ def get_drive_status():
 
 
 def detect_flash_drive():
+
     original = set(get_drive_status())
-    print('Detecting...')
-    time.sleep(1.5)
+    time.sleep(1)
     add_device = set(get_drive_status()) - original
     subt_device = original - set(get_drive_status())
 
@@ -60,6 +60,7 @@ def detect_flash_drive():
         print("There were %d" % (len(add_device)))
         for drive in add_device:
             print("The drives added: %s." % drive)
+            return drive + r':\\'
 
     elif len(subt_device):
         print("There were %d" % (len(subt_device)))
@@ -68,8 +69,15 @@ def detect_flash_drive():
 
 
 def looking_for_flash_drive():
-    while True:
-        detect_flash_drive()
+    i = 0
+    print('Looking for flashdrive...')
+    new_device = False
+    while not new_device:
+        new_device = detect_flash_drive()
+        i += 1
+        if i % 10 == 0:
+            print('Looking for flashdrive...')
+    return new_device
 
 
 """ Local Variabkes"""

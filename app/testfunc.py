@@ -11,10 +11,13 @@ import win32con
 import win32security
 import getSessionUser
 import json
+import white
 import subprocess
 import multiprocessing as mp
+import SuspiciousHandler
 from ctypes import windll
-from app import white
+#from app import white
+import concurrent.futures
 
 """
 print('Total number of arguments:', format(len(sys.argv)))
@@ -43,15 +46,17 @@ print(c + c)
 
 
 """
+PYTHON_PATH = "D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe"
+ROOT = 'C:/Users/julie/PycharmProjects/SahkarProtect-master/app'
 def function():
     PYTHON_PATH = "D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe"
     ROOT = 'C:/Users/julie/PycharmProjects/SahkarProtect-master/app'
-    cmd = r'"D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python39_5/python.exe" C:/Users/julie/PycharmProjects/SahkarProtect-master/app/white.py'
+    cmd = r'"D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python39_5/python.exe" C:/Users/julie/PycharmProjects/SahkarProtect-master/app/SuspiciousHandlerAlone.py ' + r'C:\Users\julie\Downloads C:\Users\julie\PycharmProjects\SahkarProtect-master\app\uploadServer'
     cmd = cmd.replace("/", "\\")
     print(cmd)
-    result = os.popen(cmd)
-    #result = subprocess.run(cmd, capture_output=True, text=True)
-    #result = subprocess.check_output([cmd, '2'], shell=True)
+    #result = os.popen(cmd) #returns hexa status of cmd useless
+    result = subprocess.run(cmd, capture_output=True, text=True) #returns 0 with args in cmd. Args passed but no returns value (0 ) getting stdout
+    #result = subprocess.check_output([cmd, '2'], shell=True) #without printing or with, subprocess.CalledProcessError: Command returns non 0 exit value 1
     print(result)
     #py2output = subprocess.check_output([PYTHON_PATH, 'white.py', '2'])
     #stdout = result.stdout
@@ -61,9 +66,28 @@ def function():
    # print(stderr)
     #verdict = json.loads(stdout, strict=False)["verdict"]
     #return verdict
+#function()
 
 
-function()
+#CMD = r'"D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe" C:/Users/julie/PycharmProjects/SahkarProtect-master/app/SuspiciousHandlerAlone.py C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\thrTestDir C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\testDir'
+
+#print(os.system('cmd /k ' + CMD))
+
+
+
+
+
+"""
+from subprocess import Popen, PIPE
+
+p = Popen([PYTHON_PATH, "white.py", "2"], stdin=PIPE, stdout=PIPE)
+#input = "search Wrecking Ball\n" + "play 1\n"
+output = p.communicate()[0]
+print(output)
+#output = b'' if no printing and = b'returnvalue\n\r' with printing
+
+"""
+
 
 """
 from subprocess import Popen, PIPE
@@ -84,12 +108,12 @@ print(type(args))
 
 """
 
-#proc = mp.Process(target = print_mynumber, args = (foo, ))
+#proc = mp.Process(target = print_mynumber, args = (foo, ))#cannot target file.py even if we import it
 #proc.start()
-#subprocess.call(".\white.py", shell=True)
+#subprocess.call(".\white.py", shell=True) #returns list index out of ranges of args
 
 #function()
-
+"""
 class A(object):
     def __init__(self, x, b):
         _x = ''
@@ -105,7 +129,7 @@ class A(object):
 a = A('test', 21) # We do not pass any argument to the __init__ method
 #a.method_a('Sailor!', 22)
 a.method_a('sailor', 22)
-
+"""
 """
 
 r"C:Users\julie\PycharmProjects\SahkarProtect-masterapp\encryption"

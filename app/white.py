@@ -1,11 +1,15 @@
-
-def bigtest():
-    import sys
-    a = 2
+import sys
+import time
+def bigtest(b, sleep):
+    #a = 2
     #a = sys.argv[1]
-    print(a)
+    a = b
+    #print(a)
     #print( 2 + int(a))
-    return a
+    time.sleep(sleep)
+    return a + 2
 
 #if __name__ == '__main__':
-bigtest()
+#print(" sys args : ", sys.argv[1])
+#(str(sys.argv[1]))
+#bigtest(param)

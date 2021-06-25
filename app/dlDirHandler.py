@@ -73,7 +73,7 @@ def set_chrome_corp_mode():
                         # policy dst is windows policy dir
                         os.popen("copy " + policy_src + " " + policy_definition_folder + r"\\" + policy)
 
-            return confHandler.set_chrome_config() #true or false
+            return confHandler.set_chrome_config(1) #true or false
 
         except:
             print(r"Couldn't get chrome to corporation mode. Try reinstalling chrome (in C:\ drive)")
@@ -114,7 +114,7 @@ def set_chrome_reg_keys():
             print("    ", wreg.QueryValueEx(key, 'DownloadDirectory'))
 
             key.Close()
-            return confHandler.set_regedit_config()
+            return confHandler.set_regedit_config(1)
 
         except:
             print(r"/!\ Couldn't access or modify registry :( /!\ ")
