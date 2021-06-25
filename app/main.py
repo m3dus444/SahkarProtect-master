@@ -44,6 +44,8 @@ class B(A):
 
 """ Checking configuration"""
 
+print(getSessionUser.getuser('--info'))
+time.sleep(1)
 chrome_configured_state = confHandler.is_chrome_configured()
 regedit_configured_state = confHandler.is_regedit_configured()
 configuration_tries = 0

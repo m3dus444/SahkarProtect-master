@@ -24,7 +24,7 @@ class HandleSuspicious(FileSystemEventHandler):
         if os.path.isdir(self.folder_to_track):
             for filename in os.listdir(self.folder_to_track):
                 i = 1
-                if filename != 'test' and '.skp' not in filename:
+                if filename != self.folder_to_track and '.skp' not in filename:
                     new_name = filename
 
                     """ encryption before moving to server folder"""
@@ -57,6 +57,7 @@ class HandleSuspicious(FileSystemEventHandler):
                     # print("this is the src name : " + src + '\n')
 
                     os.rename(src, dst)
+                    print("we renamed it")
         else:
             print("Scrript noticed path dir is unreachable ! \r")
             self.on_deleted(self)
@@ -111,11 +112,11 @@ def start_observer(folder_to_track, folder_destination):
     """ MAIN """
 
     event_handler = HandleSuspicious(folder_to_track, folder_destination)
-    print("Looking for suspicious files on : %s...\r" % folder_to_track)
+    #print("Looking for suspicious files on : %s...\r" % folder_to_track)
     observer = Observer()
-    print("we get trought oberserver")
+    #print("we get trought oberserver")
     observer.schedule(event_handler, path=folder_to_track, recursive=True)
-    print("we get trought schedule")
+    #print("we get trought schedule")
     try:
         observer.start()
         print("we get trought start")
