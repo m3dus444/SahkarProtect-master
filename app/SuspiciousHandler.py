@@ -11,7 +11,7 @@ import json
 import shutil
 import getSessionUser
 import quanrtineHandler
-
+import server
 
 class HandleSuspicious(FileSystemEventHandler):
     def __init__(self, folder_to_track, folder_destination):
@@ -57,7 +57,11 @@ class HandleSuspicious(FileSystemEventHandler):
                     # print("this is the src name : " + src + '\n')
 
                     os.rename(src, dst)
-                    print("we renamed it")
+                    time.sleep(0.2)
+                    """ SENDING FOR DMA"""
+                    server.execute_analysis("quick_scan_file", filename=new_name)
+                    server.execute_analysis("sandbox_file", filename=new_name)
+                    print("not blocked")
         else:
             print("Scrript noticed path dir is unreachable ! \r")
             self.on_deleted(self)
