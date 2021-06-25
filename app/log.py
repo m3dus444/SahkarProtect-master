@@ -6,12 +6,12 @@ import time
 from datetime import datetime
 import socket
 
-#path=r'C:\Users\Utilisteur\Desktop\downtest'
-#directory=os.listdir(path)
+# path=r'C:\Users\Utilisteur\Desktop\downtest'
+# directory=os.listdir(path)
 filename = r'C:\Users\Utilisteur\Desktop\downtest\ecocompare.jar'
 
 
-#function which creates log right after download
+# function which creates log right after download
 def loger(filename):
     fich = filename.split("\\")
     name, ext = os.path.splitext(filename)
@@ -31,7 +31,7 @@ def loger(filename):
         f.write(str(dat)+info+"\n")
         f.close()
 
-#function which creates log after analyse
+# function which creates log after analyse
 
 
 def logeranalysed(filename, result):
@@ -51,8 +51,8 @@ def logeranalysed(filename, result):
         f.write(str(dat)+info+"\n")
         f.close()
 
-#calling both functions
-#loger(filename)
+# calling both functions
+# loger(filename)
 #logeranalysed(filename, 1)
 
 

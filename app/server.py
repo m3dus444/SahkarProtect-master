@@ -4,7 +4,8 @@ import json
 import os
 import time
 
-UPLOAD_FOLDER = "./uploads/"
+
+UPLOAD_FOLDER = "./uploadServer/"
 CMD_BASE = "python ./VxAPI/vxapi.py"
 ARGUMENTS = "--no-share-third-party 1 --allow-community-access 0"
 
@@ -69,13 +70,14 @@ def executeScan(cmd_arguments):
     print(stdout)
     print(stderr)
     scan_id = json.loads(stdout)["id"]
+    print(scan_id)
     job_done = False
     timeout = 0
     while (job_done is False and timeout < 15):
         time.sleep(5)
         scan_result = getScanResult(scan_id)
         if (timeout == 0):
-            time.sleep(1)
+            time.sleep(2)
         if (scan_result != "in-queue"):
             job_done = True
         timeout += 1
@@ -136,6 +138,8 @@ def getScanResult(scan_id):
 
 if __name__ == "__main__":
     # result = execute_analysis(function_name = "quick_scan_url", url = "https://efreidoc.fr/")
-    result = execute_analysis(function_name="quick_scan_url_file",
-                              url="https://efreidoc.fr/L3/Chinois/CE/20XX-XX.CE.sujet.chin.pdf")
+    # result = execute_analysis(function_name="quick_scan_url_file", url = "https://efreidoc.fr/L3/Chinois/CE/20XX-XX.CE.sujet.chin.pdf")
+
+    result = execute_analysis(
+        "quick_scan_file", filename="liste_classement_ecn_20210623_1042.pdf")
     print(result)
