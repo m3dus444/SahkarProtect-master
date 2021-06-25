@@ -12,9 +12,10 @@ ARGUMENTS = "--no-share-third-party 1 --allow-community-access 0"
 def execute_analysis(function_name, url=None, filename=None, root=None):
     if (function_name == "quick_scan_file" or function_name == "sandbox_file"):
         path = UPLOAD_FOLDER + filename
-        result = locals()[function_name](path)
+        result = globals()[function_name](path)
     else:
-        result = eval(function_name(url))
+        result = globals()[function_name](url)
+        print(url)
     if (result == "malicious" or result == "suspicious" or result == "timeout exceeded"):
         return 1
     return 0
@@ -70,9 +71,11 @@ def executeScan(cmd_arguments):
     scan_id = json.loads(stdout)["id"]
     job_done = False
     timeout = 0
-    while (job_done is False and timeout < 6):
+    while (job_done is False and timeout < 15):
         time.sleep(5)
         scan_result = getScanResult(scan_id)
+        if (timeout == 0):
+            time.sleep(1)
         if (scan_result != "in-queue"):
             job_done = True
         timeout += 1
@@ -132,6 +135,7 @@ def getScanResult(scan_id):
 
 
 if __name__ == "__main__":
-    result = execute_analysis(
-        function_name="quick_scan_url", url="https: // efreidoc.fr/")
+    # result = execute_analysis(function_name = "quick_scan_url", url = "https://efreidoc.fr/")
+    result = execute_analysis(function_name="quick_scan_url_file",
+                              url="https://efreidoc.fr/L3/Chinois/CE/20XX-XX.CE.sujet.chin.pdf")
     print(result)
