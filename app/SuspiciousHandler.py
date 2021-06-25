@@ -18,6 +18,7 @@ import asyncio
 import subprocess
 
 class HandleSuspicious(FileSystemEventHandler):
+    deleted_or_sent = 0
     def __init__(self, folder_to_track, folder_destination, folder_documents, scuffed_files, pool_hybrid_analysis, async_returns_hybrid):
         self.folder_to_track = folder_to_track
         self.folder_destination = folder_destination
@@ -33,11 +34,9 @@ class HandleSuspicious(FileSystemEventHandler):
             for filename in os.listdir(self.folder_to_track):
                 i = 1
                 if filename != self.folder_to_track and '.skp' not in filename:
-                    new_name = filename
 
-                    """ encryption before moving to server folder"""
+                    new_name = filename
                     print("New suspect file is scuffed : " + filename)
-                    #quanrtineHandler.encrypt(self.folder_to_track, filename)
 
                     file_exists = os.path.isfile(self.folder_destination + '/' + new_name)
                     while file_exists:
@@ -59,7 +58,7 @@ class HandleSuspicious(FileSystemEventHandler):
                         if i >= 20:
                             break
                     self.scuffed_files.append(new_name)
-                    print(self.scuffed_files)
+                    print(" list of scuffed files : ", self.scuffed_files)
                     quanrtineHandler.encrypt(self.folder_to_track, filename, new_name)
                     src = self.folder_to_track + "/" + filename
                     dst = self.folder_destination + "/" + new_name
@@ -68,45 +67,39 @@ class HandleSuspicious(FileSystemEventHandler):
 
                     os.rename(src, dst)
                     time.sleep(0.2)
-                    """ SENDING FOR DMA"""
+                    """ SENDING FOR DMA AND SET DMA VAR"""
                     self.async_returns_hybrid.append(self.pool_hybrid_analysis.apply_async(server.execute_analysis, ("quick_scan_file", None, new_name)))
-                    if self.async_returns_hybrid[0].ready():
-                        keepquarantine = self.async_returns_hybrid[0].get()
-                        print("One of your file has been analysed\r")
-                        if keepquarantine == 0:
-                            quanrtineHandler.decrypt(self.folder_to_track, self.scuffed_files[0], self.folder_documents)
-                        elif keepquarantine == 1:
-                            print("Your file %s has been revealed to be a Ransomware/Malware !\r")
-                            os.remove(getdownloadfolder() + r"\\" + self.scuffed_files[0])
-                            os.remove(os.getcwd()+r"\\encryption\quarantineKey_" + self.scuffed_files[0] + '.skk')
-                            quanrtineHandler.encrypt(os.getcwd()+r"\\uploadServer\\", self.scuffed_files[0], self.scuffed_files[0])
-                        self.scuffed_files.remove(0)
-                        self.async_returns_hybrid.remove(0)
-                    #server.execute_analysis("quick_scan_file", filename=new_name)
-                    #server.execute_analysis("sandbox_file", filename=new_name)
-                    print("not blocked")
+                    HandleSuspicious.deleted_or_sent = 1
+                    print("NOT BLOCKED")
         else:
             print("Given script dir is unreachable for watchdog ! \r")
             self.on_deleted(self)
+
     def on_deleted(self, event):
 
         """ If client delete download folder, it recreate itself automatically and restart the script
             Plus, it also run itself once a file is sent for DMA in on_modified function because
             it deletes the file while moving it to server folder"""
-        print("we get throught this instant after normally")
+
         try:
             time.sleep(0.1)
-            if getSessionUser.getuser(0) in self.folder_to_track:
+            if getSessionUser.getuser(0) in self.folder_to_track and not os.path.isdir(self.folder_to_track):
                 os.mkdir(path=self.folder_to_track, mode=0o777)
                 print("Don't try to delete that folder ! ")
-                print(" Folder restaured, restarting process... ")
-                start_observer(self.folder_to_track, self.folder_destination)
-            else:
+                print(" Folder restored, restarting process... ")
+                start_observer(self.folder_to_track, self.folder_destination, self.folder_documents)
+            elif len(self.folder_to_track) < 5 and not os.path.isdir(self.folder_to_track):
                 print("Killing watchdog over flashdrive...")
                 #close_observer() WIP as we dont have observer to pass in args
                 sys.exit(__status="USB Key removed, killing process")
+
         except:
+            print("Couldn't restore download folder or kill process.\r")
+
+        if HandleSuspicious.deleted_or_sent == 1:
             print("Your file has been sent for DMA. You'll get it back in /Documents/ once checked.\r")
+        else:
+            print("One of your file just came back from DMA !\r")
 
     def on_moved(self, event):
         """ if the folder is moved, we try to get its new path !!!WIP!!!
@@ -152,7 +145,26 @@ def start_observer(folder_to_track, folder_destination, folder_documents):
 
     try:
         while True:
-            time.sleep(10)
+            #print(" ready status : ", event_handler.async_returns_hybrid[0].ready())
+            if len(event_handler.async_returns_hybrid) > 0 and event_handler.async_returns_hybrid[0].ready():
+                event_handler.deleted_or_sent = 0  # allow to know when a file is sent for DMA from DL folder and when it is decrypted. We dont print the same thing
+                keepquarantine = event_handler.async_returns_hybrid[0].get()
+                print("One of your file has been analysed\r")
+                print(" keep quarantine : %s \r" % str(keepquarantine))
+                if keepquarantine == 0:
+                    os.remove(os.getcwd() + r"\\uploadServer\\" + event_handler.scuffed_files[0])
+                    quanrtineHandler.decrypt(event_handler.folder_to_track, event_handler.scuffed_files[0], event_handler.folder_documents)
+
+                elif keepquarantine == 1:
+                    print("Your file %s has been revealed to be a Ransomware/Malware !\r" % event_handler.scuffed_files[0])
+                    os.remove(getdownloadfolder() + r"\\" + event_handler.scuffed_files[0])
+                    os.remove(os.getcwd() + r"\\encryption\quarantineKey_" + event_handler.scuffed_files[0] + '.skk')
+                    quanrtineHandler.encrypt(os.getcwd() + r"\\uploadServer\\", event_handler.scuffed_files[0],
+                                             event_handler.scuffed_files[0])
+                event_handler.scuffed_files.remove(event_handler.scuffed_files[0])
+                event_handler.async_returns_hybrid.remove(event_handler.async_returns_hybrid[0])
+
+            time.sleep(3)
             print("Looking for suspicious files on : %s...\r" % folder_to_track)
     except KeyboardInterrupt:
         observer.stop()
@@ -167,6 +179,6 @@ def close_observer(observer):
 
 """ GENERAL CODE """
 if len(sys.argv) > 2:
-    start_observer(sys.argv[1], sys.argv[2])
+    start_observer(sys.argv[1], sys.argv[2], sys.argv[3])
 else:
     print("we good to go without args")

@@ -68,10 +68,14 @@ def function():
     #return verdict
 #function()
 
-a = [0]*5
-for i in range(0,len(a)):
-    a[i] = 'a'
-print(a)
+
+b = []
+#b.append("True")
+#b.append(None)
+if b:
+    print("OK")
+print(len(b))
+
 
 #CMD = r'"D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe" C:/Users/julie/PycharmProjects/SahkarProtect-master/app/SuspiciousHandlerAlone.py C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\thrTestDir C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\testDir'
 
