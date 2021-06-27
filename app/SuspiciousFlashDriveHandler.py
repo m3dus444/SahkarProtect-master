@@ -1,3 +1,0 @@
-""" Write a special script for flash drives since they don't use watchdogs because
-it cannot be run with several subprocesses ....
-But it can with two separated cmd"""
