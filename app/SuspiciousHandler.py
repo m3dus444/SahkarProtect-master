@@ -3,6 +3,7 @@
 from time import sleep
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+import shutil
 import os
 import time
 import sys
@@ -40,7 +41,7 @@ class HandleSuspicious(FileSystemEventHandler):
         if os.path.isdir(self.folder_to_track):
             for filename in os.listdir(self.folder_to_track):
                 i = 1
-                if filename != self.folder_to_track and '.skp' not in filename:
+                if filename != self.folder_to_track and filename != 'System Volume Information' and '.skp' not in filename:
 
                     new_name = filename
                     xprint()
@@ -73,7 +74,9 @@ class HandleSuspicious(FileSystemEventHandler):
                     # print("this is the dst name : " + dst + '\n')
                     # print("this is the src name : " + src + '\n')
 
-                    os.rename(src, dst)
+                    shutil.move(src, dst)
+                    #os.rename(src, dst)
+                    #shutil.move(r"E:\\fgdg.txt", r"C:\users\julie\Desktop\fgdg2.txt") -> yes
                     time.sleep(0.2)
                     """ SENDING FOR DMA AND SET DMA VAR"""
                     self.async_returns_hybrid.append(self.pool_hybrid_analysis.apply_async(server.execute_analysis, (
@@ -99,6 +102,8 @@ class HandleSuspicious(FileSystemEventHandler):
 
         try:
             time.sleep(0.1) #we wait because
+            print("len dir USB: ", len(self.folder_to_track))
+            print("dir can be reach: ", os.path.isdir(self.folder_to_track))
             if getSessionUser.getuser(0) in self.folder_to_track and not os.path.isdir(self.folder_to_track):
                 os.mkdir(path=self.folder_to_track, mode=0o777)
                 print("Don't try to delete that folder ! ")
@@ -198,7 +203,6 @@ class HandleSuspicious(FileSystemEventHandler):
             self.async_returns_hybrid.remove(self.async_returns_hybrid[0])
             HandleSuspicious.DMA_started.remove(HandleSuspicious.DMA_started[0])
 
-
 def getdownloadfolder():
     if sys.version[0] == '2':
         input = raw_input
@@ -220,17 +224,25 @@ def start_observer(folder_to_track, folder_destination, folder_documents):
     observer.schedule(event_handler, path=folder_to_track, recursive=True)
     status = 0
     try:
+        #shutil.chown(folder_to_track, 'julie')
         status = observer.start()
     except:
         observer.stop()
         print(observer.join())
 
     try:
+        time.sleep(3)
+        print_count = 0
         while status != 1:
-            #print(" ready status : ", event_handler.async_returns_hybrid[0].ready())
-            """if len(event_handler.async_returns_hybrid) > 0 and event_handler.async_returns_hybrid[0].ready():
-                event_handler.deleted_or_sent = 0  # allow to know when a file is sent for DMA from DL folder and when it is decrypted. We dont print the same thing
-                keepquarantine = event_handler.async_returns_hybrid[0].get()
+            if len(event_handler.async_returns_hybrid) > 0 and event_handler.async_returns_hybrid[0].ready() and HandleSuspicious.SMA_started[0]:
+                print("1")
+                print("status ready :", event_handler.async_returns_hybrid[0].ready())
+                print("2")
+                proc = event_handler.async_returns_hybrid[0]
+                print("proc : ", proc)
+                keepquarantine = proc.get()
+                print("3")
+                print("keep quarantine : ", keepquarantine)
                 print("One of your file has been analysed\r")
                 print(" keep quarantine : %s \r" % str(keepquarantine))
                 if keepquarantine == 0:
@@ -244,11 +256,14 @@ def start_observer(folder_to_track, folder_destination, folder_documents):
                     quanrtineHandler.encrypt(os.getcwd() + r"\\uploadServer\\", event_handler.scuffed_files[0],
                                              event_handler.scuffed_files[0])
                 event_handler.scuffed_files.remove(event_handler.scuffed_files[0])
-                event_handler.async_returns_hybrid.remove(event_handler.async_returns_hybrid[0])"""
-            event_handler.SMA()
+                event_handler.async_returns_hybrid.remove(event_handler.async_returns_hybrid[0])
+                event_handler.deleted_or_sent = 0  # allow to know when a file is sent for DMA from DL folder and when it is decrypted. We dont print the same thing
+            #event_handler.SMA()
             #event_handler.DMA()
-            time.sleep(3)
-            print("Looking for suspicious files on : %s...\r" % folder_to_track)
+            time.sleep(2)
+            print_count += 1
+            if print_count % 5 == 0:
+                print("Looking for suspicious files on : %s...\r" % folder_to_track)
     except KeyboardInterrupt:
         print("KBM Interruption worked on watchdog process !")
     observer.stop()

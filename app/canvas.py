@@ -3,9 +3,9 @@ import time
 
 def xprint():
     time.sleep(0.1)
-    display_swapping(1, 1.0)
+    #display_swapping(1, 1.0)
     #print('\n' * 10)
-    display_canvas(1)
+    #display_canvas(1)
 
 def xprinttest():
     if os.path.isfile(os.getcwd() + r'\configs\xprintcounter.txt'):

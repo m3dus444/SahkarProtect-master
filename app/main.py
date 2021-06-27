@@ -91,6 +91,7 @@ if __name__ == "__main__":
     while True:
         try:
             if async_returns_USB_Handler.ready():
+                print("usb proc:", async_returns_USB_Handler)
                 new_flashdrive = async_returns_USB_Handler.get()
                 xprint()
                 print("A new FLASH DRIVE has been plugged in :", new_flashdrive)

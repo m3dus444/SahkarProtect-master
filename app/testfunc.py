@@ -1,7 +1,12 @@
 import os
+import time
+
+import quanrtineHandler
+import shutil
 """a = os.getcwd() + r'\configs'
 config_folder = fr"{a}"
 print(config_folder)"""
+import SuspiciousHandler
 
 #a = os.getcwd() + r'\configs'
 #a.encode('unicode_escape')
@@ -49,10 +54,34 @@ ROOT = 'C:/Users/julie/PycharmProjects/SahkarProtect-master/app'
 def to_raw(string):
     return fr"{string}"
 
-print(os.getcwd())
-with open(os.getcwd() + '\\configs\\chrome_setup.txt') as myfile:
-    print(myfile.readline(1))
-#print(to_raw(my_dir))
+
+from pathlib import Path
+
+dir2 = r'C:\Users\julie\Desktop\fgdg2.txt'
+dir = r'E:\\'
+time.sleep(5)
+#print(os.path.isdir(dir))
+#print(os.listdir(dir))
+#open(r'C:\users\julie\Desktop\fgdg.txt', 'x')
+#with open(r'E:\\fgdg.txt', 'r+') as file:
+    #file.write("test")
+#os.replace(r"E:\\fgdg.txt",r"C:\users\julie\Desktop\fgdg2.txt") -> no
+#shutil.copy(r"E:\\fgdg.txt", r"C:\users\julie\Desktop\fgdg2.txt") -> yes
+#shutil.move(r"E:\\fgdg.txt", r"C:\users\julie\Desktop\fgdg2.txt") -> yes
+#os.remove(r"E:\\fgdg.txt") -> yes
+
+folder_to_track = SuspiciousHandler.getdownloadfolder()
+folder_destination = os.getcwd() + r'\uploadServer'
+folder_documents = r'C:\users\\julie\Documents'
+SuspiciousHandler.start_observer(dir, folder_destination, folder_documents)
+
+#quanrtineHandler.encrypt(dir, 'fgdg.txt', 'fgdg.txt') -> yes
+#quanrtineHandler.decrypt(dir, 'fgdg.txt', dir)
+print("Owner id of the file:", os.stat(dir2).st_uid)
+print("Group id of the file:", os.stat(dir2).st_gid)
+
+
+#regarder pk l'observer se lance pas avec la clef USB
 
 
 
@@ -74,26 +103,7 @@ for i in range(10):
 
 
 r"""
-print("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
-"░░░      ░░░░░░░░░  ░░░░░░░░   ░░░░   ░   ░░░   ░░░░░░░░░  ░░░░░░░░        ░░░░\n" +
-"▒   ▒▒▒▒   ▒▒▒▒▒▒  ▒  ▒▒▒▒▒▒   ▒▒▒▒   ▒   ▒▒   ▒▒▒▒▒▒▒▒▒  ▒  ▒▒▒▒▒▒   ▒▒▒▒   ▒▒\n" +
-"▒▒   ▒▒▒▒▒▒▒▒▒▒▒  ▒▒   ▒▒▒▒▒   ▒▒▒▒   ▒   ▒   ▒▒▒▒▒▒▒▒▒  ▒▒   ▒▒▒▒▒   ▒▒▒▒   ▒▒\n" +
-"▓▓▓▓   ▓▓▓▓▓▓▓▓   ▓▓▓   ▓▓▓▓          ▓  ▓  ▓▓▓▓▓▓▓▓▓▓   ▓▓▓   ▓▓▓▓  ▓   ▓▓▓▓▓▓\n" +
-"▓▓▓▓▓▓▓   ▓▓▓▓       ▓   ▓▓▓   ▓▓▓▓   ▓   ▓▓   ▓▓▓▓▓▓       ▓   ▓▓▓   ▓▓   ▓▓▓▓\n" +
-"▓   ▓▓▓▓   ▓▓   ▓▓▓▓▓▓▓   ▓▓   ▓▓▓▓   ▓   ▓▓▓   ▓▓▓▓   ▓▓▓▓▓▓▓   ▓▓   ▓▓▓▓   ▓▓\n" +
-"███      ███   █████████   █   ████   █   █████   █   █████████   █   ██████   \n" +
-"███████████████████████████████████████████████████████████████████████████████\n")
-
-print("  ██████  ▄▄▄       ██░ ██  ▀██ ▄█▀ ▄▄▄      ██▀███ \n"+
-"▒██    ▒ ▒████▄   ▒▓██░ ██   ██▄█▒ ▒████▄   ▓██ ▒ ██▒\n" +
-"░ ▓██▄   ▒██  ▀█▄ ░▒██▀▀██  ▓███▄░ ▒██  ▀█▄ ▓██ ░▄█ ▒\n" +
-"  ▒   ██▒░██▄▄▄▄██ ░▓█ ░██  ▓██ █▄ ░██▄▄▄▄██▒██▀▀█▄  \n" +
-"▒██████▒▒ ▓█   ▓██ ░▓█▒░██▓ ▒██▒ █▄ ▓█   ▓██░██▓ ▒██▒\n" +
-"▒ ▒▓▒ ▒ ░ ▒▒   ▓▒█  ▒ ░░▒░▒ ▒ ▒▒ ▓▒ ▒▒   ▓▒█░ ▒▓ ░▒▓░\n" +
-"░ ░▒  ░    ░   ▒▒   ▒ ░▒░ ░ ░ ░▒ ▒░  ░   ▒▒   ░▒ ░ ▒░\n" +
-"░  ░  ░    ░   ▒    ░  ░░ ░ ░ ░░ ░   ░   ▒     ░   ░ \n" +
-"      ░        ░    ░  ░  ░ ░  ░         ░     ░     \n")"""
-
+"""
 
 #CMD = r'"D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe" C:/Users/julie/PycharmProjects/SahkarProtect-master/app/SuspiciousHandlerAlone.py C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\thrTestDir C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\testDir'
 
@@ -110,8 +120,8 @@ p = Popen([PYTHON_PATH, "white.py", "2"], stdin=PIPE, stdout=PIPE)
 output = p.communicate()[0]
 print(output)
 #output = b'' if no printing and = b'returnvalue\n\r' with printing
-
 """
+
 
 
 """
@@ -133,7 +143,7 @@ parser.add_argument("/d", "//dir")
 args = parser.parse_args()
 print(args)
 print(type(args))
-
+"""
 """
 
 #proc = mp.Process(target = print_mynumber, args = (foo, ))#cannot target file.py even if we import it
@@ -141,6 +151,7 @@ print(type(args))
 #subprocess.call(".\white.py", shell=True) #returns list index out of ranges of args
 
 #function()
+"""
 """
 class A(object):
     def __init__(self, x, b):
