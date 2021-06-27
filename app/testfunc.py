@@ -1,24 +1,19 @@
-import argparse
-import ctypes
-import subprocess
-import sys
 import os
-import shutil
-import time
-from elevate import elevate
-import win32api
-import win32con
-import win32security
-import getSessionUser
-import json
-import white
-import subprocess
-import multiprocessing as mp
-#import SuspiciousHandler
-from ctypes import windll
-#from app import white
-import concurrent.futures
+"""a = os.getcwd() + r'\configs'
+config_folder = fr"{a}"
+print(config_folder)"""
 
+#a = os.getcwd() + r'\configs'
+#a.encode('unicode_escape')
+#print(a)
+
+"""
+print(config_folder)
+print(os.path.isdir(config_folder))
+
+print(config_folder)
+print(os.path.isdir(config_folder))
+"""
 """
 print('Total number of arguments:', format(len(sys.argv)))
 
@@ -48,33 +43,56 @@ print(c + c)
 """
 PYTHON_PATH = "D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe"
 ROOT = 'C:/Users/julie/PycharmProjects/SahkarProtect-master/app'
-def function():
-    PYTHON_PATH = "D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe"
-    ROOT = 'C:/Users/julie/PycharmProjects/SahkarProtect-master/app'
-    cmd = r'"D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python39_5/python.exe" C:/Users/julie/PycharmProjects/SahkarProtect-master/app/SuspiciousHandlerAlone.py ' + r'C:\Users\julie\Downloads C:\Users\julie\PycharmProjects\SahkarProtect-master\app\uploadServer'
-    cmd = cmd.replace("/", "\\")
-    print(cmd)
-    #result = os.popen(cmd) #returns hexa status of cmd useless
-    result = subprocess.run(cmd, capture_output=True, text=True) #returns 0 with args in cmd. Args passed but no returns value (0 ) getting stdout
-    #result = subprocess.check_output([cmd, '2'], shell=True) #without printing or with, subprocess.CalledProcessError: Command returns non 0 exit value 1
-    print(result)
-    #py2output = subprocess.check_output([PYTHON_PATH, 'white.py', '2'])
-    #stdout = result.stdout
-    #stderr = result.stderr
-    #print(py2output)
-    #print(stdout)
-   # print(stderr)
-    #verdict = json.loads(stdout, strict=False)["verdict"]
-    #return verdict
-#function()
+#raw_s = r'{}'.format(s)
+
+#'C:\\Users\\julie\\PycharmProjects\\SahkarProtect-master\\app\\configs\\chrome_config.txt'
+def to_raw(string):
+    return fr"{string}"
+
+print(os.getcwd())
+with open(os.getcwd() + '\\configs\\chrome_setup.txt') as myfile:
+    print(myfile.readline(1))
+#print(to_raw(my_dir))
 
 
-b = []
-#b.append("True")
-#b.append(None)
-if b:
-    print("OK")
-print(len(b))
+
+"""with open(os.getcwd() + r'\configs\testsss.txt', 'r+') as xprintcount:
+    xprintcount.write("1")
+with open(os.getcwd() + r'\configs\testsss.txt', 'r+') as xprintcount:
+    xprintcount.write("2")
+with open(os.getcwd() + r'\configs\testsss.txt', 'r') as xprintcount:
+    print(xprintcount.readline(1))"""
+
+"""canvas.display_loading(5)
+time.sleep(3)
+
+
+for i in range(10):
+    xprint()
+    print("new i : ", i)
+#print(eval(a))"""
+
+
+r"""
+print("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
+"░░░      ░░░░░░░░░  ░░░░░░░░   ░░░░   ░   ░░░   ░░░░░░░░░  ░░░░░░░░        ░░░░\n" +
+"▒   ▒▒▒▒   ▒▒▒▒▒▒  ▒  ▒▒▒▒▒▒   ▒▒▒▒   ▒   ▒▒   ▒▒▒▒▒▒▒▒▒  ▒  ▒▒▒▒▒▒   ▒▒▒▒   ▒▒\n" +
+"▒▒   ▒▒▒▒▒▒▒▒▒▒▒  ▒▒   ▒▒▒▒▒   ▒▒▒▒   ▒   ▒   ▒▒▒▒▒▒▒▒▒  ▒▒   ▒▒▒▒▒   ▒▒▒▒   ▒▒\n" +
+"▓▓▓▓   ▓▓▓▓▓▓▓▓   ▓▓▓   ▓▓▓▓          ▓  ▓  ▓▓▓▓▓▓▓▓▓▓   ▓▓▓   ▓▓▓▓  ▓   ▓▓▓▓▓▓\n" +
+"▓▓▓▓▓▓▓   ▓▓▓▓       ▓   ▓▓▓   ▓▓▓▓   ▓   ▓▓   ▓▓▓▓▓▓       ▓   ▓▓▓   ▓▓   ▓▓▓▓\n" +
+"▓   ▓▓▓▓   ▓▓   ▓▓▓▓▓▓▓   ▓▓   ▓▓▓▓   ▓   ▓▓▓   ▓▓▓▓   ▓▓▓▓▓▓▓   ▓▓   ▓▓▓▓   ▓▓\n" +
+"███      ███   █████████   █   ████   █   █████   █   █████████   █   ██████   \n" +
+"███████████████████████████████████████████████████████████████████████████████\n")
+
+print("  ██████  ▄▄▄       ██░ ██  ▀██ ▄█▀ ▄▄▄      ██▀███ \n"+
+"▒██    ▒ ▒████▄   ▒▓██░ ██   ██▄█▒ ▒████▄   ▓██ ▒ ██▒\n" +
+"░ ▓██▄   ▒██  ▀█▄ ░▒██▀▀██  ▓███▄░ ▒██  ▀█▄ ▓██ ░▄█ ▒\n" +
+"  ▒   ██▒░██▄▄▄▄██ ░▓█ ░██  ▓██ █▄ ░██▄▄▄▄██▒██▀▀█▄  \n" +
+"▒██████▒▒ ▓█   ▓██ ░▓█▒░██▓ ▒██▒ █▄ ▓█   ▓██░██▓ ▒██▒\n" +
+"▒ ▒▓▒ ▒ ░ ▒▒   ▓▒█  ▒ ░░▒░▒ ▒ ▒▒ ▓▒ ▒▒   ▓▒█░ ▒▓ ░▒▓░\n" +
+"░ ░▒  ░    ░   ▒▒   ▒ ░▒░ ░ ░ ░▒ ▒░  ░   ▒▒   ░▒ ░ ▒░\n" +
+"░  ░  ░    ░   ▒    ░  ░░ ░ ░ ░░ ░   ░   ▒     ░   ░ \n" +
+"      ░        ░    ░  ░  ░ ░  ░         ░     ░     \n")"""
 
 
 #CMD = r'"D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe" C:/Users/julie/PycharmProjects/SahkarProtect-master/app/SuspiciousHandlerAlone.py C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\thrTestDir C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\testDir'
@@ -140,7 +158,7 @@ a = A('test', 21) # We do not pass any argument to the __init__ method
 #a.method_a('Sailor!', 22)
 a.method_a('sailor', 22)
 """
-"""
+r"""
 
 r"C:Users\julie\PycharmProjects\SahkarProtect-masterapp\encryption"
 
@@ -153,5 +171,13 @@ new_string = old_string[:old_string.rfind("_")] + "." + old_string[old_string.rf
 #os.system("cleandesk.py")
 #exec(open("cleandesk.py").read())
 print(os.getcwd())
+
+
+def progressBar(current, total, barLength = 20):
+    percent = float(current) * 100 / total
+    arrow   = '-' * int(percent/100 * barLength - 1) + '>'
+    spaces  = ' ' * (barLength - len(arrow))
+
+    print('Progress: [%s%s] %d %%' % (arrow, spaces, percent), end='\r')
 
 """

@@ -6,18 +6,21 @@ We want the session user name opened to add correct path in registry dir for dlD
 
 
 """
+import sys
+import time
 
 import win32api
 import win32con
 import win32security
-import os
-import getpass
 import confHandler
+import os
 
 
 def getuser(details):
-    if os.path.isfile(os.getcwd() + r"\configs\guinea_pig.txt"):
-        guinea_pig = os.getcwd() + r"\configs\guinea_pig.txt"
+    #if os.path.isfile(r'' + os.getcwd() + r"\configs\guinea_pig.txt"):
+    if os.path.isfile(config_folder + r"\guinea_pig.txt"):
+        #guinea_pig = r'' + os.getcwd() + r"\configs\guinea_pig.txt"
+        guinea_pig = config_folder + r"\guinea_pig.txt"
         security_description = win32security.GetFileSecurity(guinea_pig, win32security.OWNER_SECURITY_INFORMATION)  # returns security file description
         owner_sid = security_description.GetSecurityDescriptorOwner()  # returns Owner sid from file sec description
         name, domain, type = win32security.LookupAccountSid(None, owner_sid)  # extract Owner name from sid
@@ -34,9 +37,19 @@ def getuser(details):
         print("missing guinea pig file. Trying to create one...")
         if os.getlogin() in os.getcwd():
             confHandler.set_guinea_pig_config()
-            print(getuser(details))
+            print("Configs files generated, please restart script.")
+            time.sleep(1)
+            sys.exit()
         else:
             print("You're probably ran this script in administrator mode. Try to run this script is user mode.")
 
+
+config_folder = os.getcwd() + r'\configs'
+#config_folder = "C:\\Users\\julie\\PycharmProjects\\SahkarProtect-master\\app\\configs"
+#config_folder_no_raw = os.getcwd() + '\\configs'
+#config_folder = fr"{config_folder_no_raw}"
+#config_folder.encode('unicode_escape')
+#config_folder = confHandler.to_raw(os.getcwd() + r'\configs')
+
 if __name__ == '__main__':
-    getuser(0)
+    print(getuser(0))
