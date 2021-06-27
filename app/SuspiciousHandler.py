@@ -14,6 +14,7 @@ import quanrtineHandler
 from multiprocessing.pool import ThreadPool
 import server
 from canvas import xprint as xprint
+import extensions
 
 
 class HandleSuspicious(FileSystemEventHandler):
@@ -43,7 +44,8 @@ class HandleSuspicious(FileSystemEventHandler):
         if os.path.isdir(self.folder_to_track):
             for filename in os.listdir(self.folder_to_track):
                 i = 1
-                if filename != self.folder_to_track and filename != 'System Volume Information' and '.skp' not in filename:
+                dontcare, extension = os.path.splitext(filename)
+                if filename != self.folder_to_track and filename != 'System Volume Information' and '.skp' != extension and extension in extensions.untrusted_extensions:
 
                     new_name = filename
                     xprint()
@@ -183,7 +185,6 @@ class HandleSuspicious(FileSystemEventHandler):
             self.scuffed_files.remove(self.scuffed_files[0])
             self.async_returns_hybrid.remove(self.async_returns_hybrid[0])
             HandleSuspicious.DMA_started.remove(HandleSuspicious.DMA_started[0])
-
 
 
 def getdownloadfolder():
