@@ -1,24 +1,24 @@
-import argparse
-import ctypes
-import subprocess
-import sys
 import os
-import shutil
 import time
-from elevate import elevate
-import win32api
-import win32con
-import win32security
-import getSessionUser
-import json
-import white
-import subprocess
-import multiprocessing as mp
-#import SuspiciousHandler
-from ctypes import windll
-#from app import white
-import concurrent.futures
 
+import quanrtineHandler
+import shutil
+"""a = os.getcwd() + r'\configs'
+config_folder = fr"{a}"
+print(config_folder)"""
+import SuspiciousHandler
+
+#a = os.getcwd() + r'\configs'
+#a.encode('unicode_escape')
+#print(a)
+
+"""
+print(config_folder)
+print(os.path.isdir(config_folder))
+
+print(config_folder)
+print(os.path.isdir(config_folder))
+"""
 """
 print('Total number of arguments:', format(len(sys.argv)))
 
@@ -48,30 +48,62 @@ print(c + c)
 """
 PYTHON_PATH = "D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe"
 ROOT = 'C:/Users/julie/PycharmProjects/SahkarProtect-master/app'
-def function():
-    PYTHON_PATH = "D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe"
-    ROOT = 'C:/Users/julie/PycharmProjects/SahkarProtect-master/app'
-    cmd = r'"D:/Program Files (x86)/Microsoft Visual Studio/Shared/Python39_5/python.exe" C:/Users/julie/PycharmProjects/SahkarProtect-master/app/SuspiciousHandlerAlone.py ' + r'C:\Users\julie\Downloads C:\Users\julie\PycharmProjects\SahkarProtect-master\app\uploadServer'
-    cmd = cmd.replace("/", "\\")
-    print(cmd)
-    #result = os.popen(cmd) #returns hexa status of cmd useless
-    result = subprocess.run(cmd, capture_output=True, text=True) #returns 0 with args in cmd. Args passed but no returns value (0 ) getting stdout
-    #result = subprocess.check_output([cmd, '2'], shell=True) #without printing or with, subprocess.CalledProcessError: Command returns non 0 exit value 1
-    print(result)
-    #py2output = subprocess.check_output([PYTHON_PATH, 'white.py', '2'])
-    #stdout = result.stdout
-    #stderr = result.stderr
-    #print(py2output)
-    #print(stdout)
-   # print(stderr)
-    #verdict = json.loads(stdout, strict=False)["verdict"]
-    #return verdict
-#function()
+#raw_s = r'{}'.format(s)
 
-a = [0]*5
-for i in range(0,len(a)):
-    a[i] = 'a'
-print(a)
+#'C:\\Users\\julie\\PycharmProjects\\SahkarProtect-master\\app\\configs\\chrome_config.txt'
+def to_raw(string):
+    return fr"{string}"
+
+
+from pathlib import Path
+
+dir2 = r'C:\Users\julie\Desktop\fgdg2.txt'
+dir = r'E:\\'
+time.sleep(5)
+#print(os.path.isdir(dir))
+#print(os.listdir(dir))
+#open(r'C:\users\julie\Desktop\fgdg.txt', 'x')
+#with open(r'E:\\fgdg.txt', 'r+') as file:
+    #file.write("test")
+#os.replace(r"E:\\fgdg.txt",r"C:\users\julie\Desktop\fgdg2.txt") -> no
+#shutil.copy(r"E:\\fgdg.txt", r"C:\users\julie\Desktop\fgdg2.txt") -> yes
+#shutil.move(r"E:\\fgdg.txt", r"C:\users\julie\Desktop\fgdg2.txt") -> yes
+#os.remove(r"E:\\fgdg.txt") -> yes
+
+folder_to_track = SuspiciousHandler.getdownloadfolder()
+folder_destination = os.getcwd() + r'\uploadServer'
+folder_documents = r'C:\users\\julie\Documents'
+SuspiciousHandler.start_observer(dir, folder_destination, folder_documents)
+
+#quanrtineHandler.encrypt(dir, 'fgdg.txt', 'fgdg.txt') -> yes
+#quanrtineHandler.decrypt(dir, 'fgdg.txt', dir)
+print("Owner id of the file:", os.stat(dir2).st_uid)
+print("Group id of the file:", os.stat(dir2).st_gid)
+
+
+#regarder pk l'observer se lance pas avec la clef USB
+
+
+
+"""with open(os.getcwd() + r'\configs\testsss.txt', 'r+') as xprintcount:
+    xprintcount.write("1")
+with open(os.getcwd() + r'\configs\testsss.txt', 'r+') as xprintcount:
+    xprintcount.write("2")
+with open(os.getcwd() + r'\configs\testsss.txt', 'r') as xprintcount:
+    print(xprintcount.readline(1))"""
+
+"""canvas.display_loading(5)
+time.sleep(3)
+
+
+for i in range(10):
+    xprint()
+    print("new i : ", i)
+#print(eval(a))"""
+
+
+r"""
+"""
 
 #CMD = r'"D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe" C:/Users/julie/PycharmProjects/SahkarProtect-master/app/SuspiciousHandlerAlone.py C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\thrTestDir C:\Users\julie\PycharmProjects\SahkarProtect-master\\app\\testDir'
 
@@ -88,8 +120,8 @@ p = Popen([PYTHON_PATH, "white.py", "2"], stdin=PIPE, stdout=PIPE)
 output = p.communicate()[0]
 print(output)
 #output = b'' if no printing and = b'returnvalue\n\r' with printing
-
 """
+
 
 
 """
@@ -111,7 +143,7 @@ parser.add_argument("/d", "//dir")
 args = parser.parse_args()
 print(args)
 print(type(args))
-
+"""
 """
 
 #proc = mp.Process(target = print_mynumber, args = (foo, ))#cannot target file.py even if we import it
@@ -119,6 +151,7 @@ print(type(args))
 #subprocess.call(".\white.py", shell=True) #returns list index out of ranges of args
 
 #function()
+"""
 """
 class A(object):
     def __init__(self, x, b):
@@ -136,7 +169,7 @@ a = A('test', 21) # We do not pass any argument to the __init__ method
 #a.method_a('Sailor!', 22)
 a.method_a('sailor', 22)
 """
-"""
+r"""
 
 r"C:Users\julie\PycharmProjects\SahkarProtect-masterapp\encryption"
 
@@ -149,5 +182,13 @@ new_string = old_string[:old_string.rfind("_")] + "." + old_string[old_string.rf
 #os.system("cleandesk.py")
 #exec(open("cleandesk.py").read())
 print(os.getcwd())
+
+
+def progressBar(current, total, barLength = 20):
+    percent = float(current) * 100 / total
+    arrow   = '-' * int(percent/100 * barLength - 1) + '>'
+    spaces  = ' ' * (barLength - len(arrow))
+
+    print('Progress: [%s%s] %d %%' % (arrow, spaces, percent), end='\r')
 
 """

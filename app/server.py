@@ -20,8 +20,10 @@ def execute_analysis(function_name, url=None, filename=None, root=None):
         print(url)
     if (result == "malicious" or result == "suspicious" or result == "timeout exceeded"):
         log.log_analysed(filename, 1)
+        print("WERE RETURNING 1")
         return 1
     log.log_analysed(filename, 0)
+    print("WERE RETURNING 0")
     return 0
 
 
@@ -70,7 +72,7 @@ def executeScan(cmd_arguments):
     result = subprocess.run(cmd, capture_output=True, text=True)
     stdout = result.stdout
     stderr = result.stderr
-    print(stdout)
+    print("STDOUT : \r", stdout)
     print(stderr)
     stdout = stdout[:-4]
     scan_id = json.loads(stdout)["id"]
@@ -87,8 +89,8 @@ def executeScan(cmd_arguments):
             job_done = True
         timeout += 1
     if (timeout >= 15):
-        return "timeout exceeded"
-    print(scan_result)
+        print("TIMEOUT EXCEEDED")
+    print("SCAN RESULT : \r", scan_result)
     return scan_result
 
 

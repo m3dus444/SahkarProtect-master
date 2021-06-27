@@ -70,6 +70,7 @@ def detect_flash_drive():
 
 def looking_for_flash_drive():
     i = 0
+    time.sleep(5)  # we wait for other xprint to come first (watchdog's one)
     print('Looking for flashdrive...')
     new_device = False
     while not new_device:
