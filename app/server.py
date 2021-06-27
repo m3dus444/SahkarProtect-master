@@ -4,8 +4,11 @@ import json
 import os
 import time
 import log
+import canvas
 
 UPLOAD_FOLDER = "./uploadServer/"
+#UPLOAD_FOLDER = r"C:/Users/julie/PycharmProjects/SahkarProtect-master/app/uploadServer/"
+#CMD_BASE = r'"D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe" C:/Users/julie/PycharmProjects/SahkarProtect-master/app//VxAPI/vxapi.py'
 CMD_BASE = "python ./VxAPI/vxapi.py"
 ARGUMENTS = "--no-share-third-party 1 --allow-community-access 0"
 
@@ -20,10 +23,8 @@ def execute_analysis(function_name, url=None, filename=None, root=None):
         print(url)
     if (result == "malicious" or result == "suspicious" or result == "timeout exceeded"):
         log.log_analysed(filename, 1)
-        print("WERE RETURNING 1")
         return 1
     log.log_analysed(filename, 0)
-    print("WERE RETURNING 0")
     return 0
 
 
@@ -72,11 +73,9 @@ def executeScan(cmd_arguments):
     result = subprocess.run(cmd, capture_output=True, text=True)
     stdout = result.stdout
     stderr = result.stderr
-    print("STDOUT : \r", stdout)
     print(stderr)
     stdout = stdout[:-4]
     scan_id = json.loads(stdout)["id"]
-    print(scan_id)
     job_done = False
     timeout = 0
     scan_result = None
@@ -90,7 +89,6 @@ def executeScan(cmd_arguments):
         timeout += 1
     if (timeout >= 15):
         print("TIMEOUT EXCEEDED")
-    print("SCAN RESULT : \r", scan_result)
     return scan_result
 
 
@@ -99,8 +97,8 @@ def executeSandbox(cmd_arguments):
     result = subprocess.run(cmd, capture_output=True, text=True)
     stdout = result.stdout
     stderr = result.stderr
-    print(stdout)
-    print(stderr)
+    #print(stdout)
+    #print(stderr)
     stdout = stdout[:-4]
     job_id = json.loads(stdout)["job_id"]
     job_done = False
@@ -153,6 +151,7 @@ if __name__ == "__main__":
     """
     result = execute_analysis(function_name="quick_scan_url_file", url = "https://efreidoc.fr/L3/Chinois/CE/20XX-XX.CE.sujet.chin.pdf")
     """
+    canvas.display_loading(2)
     result = execute_analysis(
-        "quick_scan_file", filename="deprecated-list.html")
+        "quick_scan_file", filename="aarccfgazt.jar")
     print(result)

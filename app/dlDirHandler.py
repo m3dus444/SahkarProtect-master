@@ -10,6 +10,7 @@ It will handle Mails Downloads later [WIP]
 import ctypes
 import subprocess
 import sys
+#sys.path.insert(0,'C:/Users/julie/PycharmProjects/SahkarProtect-master/app')
 import os
 import getSessionUser
 import confHandler
