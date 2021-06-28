@@ -7,6 +7,12 @@ def xprint():
     #print('\n' * 10)
     display_canvas(1)
 
+
+class xprintt():
+    def __init__(self):
+        xprint()
+        # do stuff
+
 def xprinttest():
     if os.path.isfile(os.getcwd() + r'\configs\xprintcounter.txt'):
         with open(os.getcwd() + r'\configs\xprintcounter.txt', 'r+') as xprintcount:

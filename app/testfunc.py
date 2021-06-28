@@ -69,12 +69,6 @@ time.sleep(5)
 #shutil.copy(r"E:\\fgdg.txt", r"C:\users\julie\Desktop\fgdg2.txt") -> yes
 #shutil.move(r"E:\\fgdg.txt", r"C:\users\julie\Desktop\fgdg2.txt") -> yes
 #os.remove(r"E:\\fgdg.txt") -> yes
-
-folder_to_track = SuspiciousHandler.getdownloadfolder()
-folder_destination = os.getcwd() + r'\uploadServer'
-folder_documents = r'C:\users\\julie\Documents'
-SuspiciousHandler.start_observer(dir, folder_destination, folder_documents)
-
 #quanrtineHandler.encrypt(dir, 'fgdg.txt', 'fgdg.txt') -> yes
 #quanrtineHandler.decrypt(dir, 'fgdg.txt', dir)
 print("Owner id of the file:", os.stat(dir2).st_uid)

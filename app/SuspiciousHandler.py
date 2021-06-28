@@ -25,22 +25,25 @@ class HandleSuspicious(FileSystemEventHandler):
     remove work assignment at index 0 of all lists. """
 
     deleted_or_sent = 0
-    scuffed_files = []
+    scuffed_files_SMA = []
+    scuffed_files_DMA = []
     SMA_started = []
     DMA_started = []
 
-    def __init__(self, folder_to_track, folder_destination, folder_documents, pool_hybrid_analysis, async_returns_hybrid):
+    def __init__(self, folder_to_track, folder_destination, folder_documents, pool_hybrid_analysis, async_returns_hybridSMA, async_returns_hybridDMA):
         self.folder_to_track = folder_to_track
         self.folder_destination = folder_destination
         self.folder_documents = folder_documents
         self.pool_hybrid_analysis = pool_hybrid_analysis
-        self.async_returns_hybrid = async_returns_hybrid
+        self.async_returns_hybridSMA = async_returns_hybridSMA
+        self.async_returns_hybridDMA = async_returns_hybridDMA
         xprint()
         print("A new watchdog is awake !\r")
         print("Looking for suspicious files on : %s...\r" % folder_to_track)
 
     def on_modified(self, event):
         """ This function run itself when the folder/subfolder/file in folder is moved in/ modified"""
+        print("ON MIDIFIED")
         if os.path.isdir(self.folder_to_track):
             for filename in os.listdir(self.folder_to_track):
                 i = 1
@@ -49,7 +52,7 @@ class HandleSuspicious(FileSystemEventHandler):
 
                     new_name = filename
                     xprint()
-                    print("New suspect file is scuffed : " + filename)
+                    print("New suspect file is scuffed : " + new_name)
 
                     file_exists = os.path.isfile(self.folder_destination + '/' + new_name)
                     while file_exists:
@@ -69,27 +72,28 @@ class HandleSuspicious(FileSystemEventHandler):
 
                         file_exists = os.path.isfile(self.folder_destination + "/" + new_name)
                         if i >= 20:
+                            print("Too many files like this")
                             break
-                    HandleSuspicious.scuffed_files.append(new_name)
-                    print(" list of current scuffed files : ", self.scuffed_files)
+
+                    self.scuffed_files_SMA.append(filename)
+                    self.scuffed_files_SMA.append(new_name)
+                    print(" List of current scuffed files : ")
+                    j=0
+                    for scuff in self.scuffed_files_SMA:
+                        if j % 2 == 0:
+                            print(scuff, end='-')
+
                     quanrtineHandler.encrypt(self.folder_to_track, filename, new_name)
                     src = self.folder_to_track + "/" + filename
                     dst = self.folder_destination + "/" + new_name
 
                     shutil.move(src, dst)
-                    #os.rename(src, dst)
                     #shutil.move(r"E:\\fgdg.txt", r"C:\users\julie\Desktop\fgdg2.txt") -> yes
                     time.sleep(0.25)
 
-                    """ SENDING FOR DMA AND SET DMA VAR"""
-                    self.async_returns_hybrid.append(self.pool_hybrid_analysis.apply_async(server.execute_analysis, (
+                    """ SENDING FOR SMA"""
+                    self.async_returns_hybridSMA.append(self.pool_hybrid_analysis.apply_async(server.execute_analysis, (
                                 "quick_scan_file", None, new_name)))
-                    HandleSuspicious.SMA_started.append(1)
-                    time.sleep(1)
-                    #self.async_returns_hybrid.append(self.pool_hybrid_analysis.apply_async(server.execute_analysis, (
-                    #            "sandbox_file", None, new_name)))
-                    #HandleSuspicious.DMA_started.append(1)
-
                     print("Your file has been sent for SMA and DMA. You'll get it back in /Documents/ once checked.\r")
 
 
@@ -124,10 +128,26 @@ class HandleSuspicious(FileSystemEventHandler):
         """
 
     def on_created(self, event):
-        """ WTD ? """
-        """for download in os.listdir(self.folder_to_track):
-            if '.skp' not in download:
-                print("Your download has been sent for SMA and DMA")"""
+        """ WE INCREMENT FILENAME LOCALLY. To avoid getting sames encryption keys
+         when we encrypt again the same file! """
+        """print(" A new download just finished ! ")
+        if os.path.isdir(self.folder_to_track):
+            for filename in os.listdir(self.folder_to_track):
+                name, extension = os.path.splitext(filename)
+                print("name %s" % name)
+                print("extension %s", extension)
+
+                if filename != self.folder_to_track and filename != 'System Volume Information' and '.skp' != extension and extension in extensions.untrusted_extensions:
+                    i = 1
+                    while filename + '.skp' in os.listdir(self.folder_to_track):
+                        print("fiilename : %s" %filename)
+                        new_name = name
+                        if i > 2:
+                            new_name = new_name[:-3]
+                        new_name = new_name + extension
+                        print("new_name : %s" % new_name)
+                        os.rename(filename, new_name + '(' + str(i) + ')')
+                        i += 1"""
 
     def on_removed(self):
         if len(self.folder_to_track) < 5 and not os.path.isdir(self.folder_to_track):
@@ -137,54 +157,65 @@ class HandleSuspicious(FileSystemEventHandler):
             sys.exit()
 
     def SMA(self):
-        if len(self.async_returns_hybrid) > 0 and self.async_returns_hybrid[0].ready() and HandleSuspicious.SMA_started[0]:
-            keepquarantine = self.async_returns_hybrid[0].get()
-            print("Your file %s is a clear file !\r" % self.scuffed_files[0])
+        if len(self.async_returns_hybridSMA) > 0 and self.async_returns_hybridSMA[0].ready() and self.scuffed_files_SMA[0]:
+            keepquarantine = self.async_returns_hybridSMA[0].get()
             if keepquarantine == 0:
-                os.remove(os.getcwd() + r"\\uploadServer\\" + self.scuffed_files[0])
-                quanrtineHandler.decrypt(self.folder_to_track, self.scuffed_files[0],
-                                         self.folder_documents)
-                """ if .exe call DMA"""
+                if (self.scuffed_files_SMA[0])[+4:] == '.exe':
+                    self.async_returns_hybridDMA.append(self.pool_hybrid_analysis.apply_async(server.execute_analysis, (
+                            "sandbox_file", None, self.scuffed_files_SMA[1])))
+                    self.scuffed_files_DMA.append(self.scuffed_files_SMA[0])
+                    self.scuffed_files_DMA.append(self.scuffed_files_SMA[1])
+                    print("Your file %s has been sent for DMA" % self.scuffed_files_SMA[0])
+                    self.scuffed_files_SMA.remove(self.scuffed_files_SMA[0])
+                    self.scuffed_files_SMA.remove(self.scuffed_files_SMA[1])
+                else:
+                    os.remove(os.getcwd() + r"\\uploadServer\\" + self.scuffed_files_SMA[1])
+                    quanrtineHandler.decrypt(self.folder_to_track, self.scuffed_files_SMA[0],
+                                             self.scuffed_files_SMA[1], self.folder_documents)
+                    print("Your file %s is a clear file !\r" % self.scuffed_files_SMA[0])
+                    self.scuffed_files_SMA.remove(self.scuffed_files_SMA[0])
+                    self.scuffed_files_SMA.remove(self.scuffed_files_SMA[1])
 
             elif keepquarantine == 1:
-                print("Your file %s has been revealed to be a Ransomware/Malware !\r" % self.scuffed_files[0])
-                os.remove(getdownloadfolder() + r"\\" + self.scuffed_files[0])
-                os.remove(os.getcwd() + r"\\encryption\quarantineKey_" + self.scuffed_files[0] + '.skk')
-                quanrtineHandler.encrypt(os.getcwd() + r"\\uploadServer\\", self.scuffed_files[0],
-                                         self.scuffed_files[0])
+                print("Your file %s has been revealed to be a Ransomware/Malware !\r" % self.scuffed_files_SMA[0])
+                os.remove(getdownloadfolder() + r"\\" + self.scuffed_files_SMA[0] + '.skp')
+                os.remove(os.getcwd() + r"\\encryption\quarantineKey_" + self.scuffed_files_SMA[0] + '.skk')
+                quanrtineHandler.encrypt(os.getcwd() + r"\\uploadServer\\", self.scuffed_files_SMA[1],
+                                         self.scuffed_files_SMA[1])
+                self.scuffed_files_SMA.remove(self.scuffed_files_SMA[0])
+                self.scuffed_files_SMA.remove(self.scuffed_files_SMA[1])
 
             else:
-                print("SMA status of your file %s can't be established" % self.scuffed_files[0])
+                print("SMA status of your file %s can't be established" % self.scuffed_files_SMA[0])
                 """ if .exe call DMA"""
+                self.scuffed_files_SMA.remove(self.scuffed_files_SMA[0])
+                self.scuffed_files_SMA.remove(self.scuffed_files_SMA[1])
 
-            self.scuffed_files.remove(self.scuffed_files[0])
-            self.async_returns_hybrid.remove(self.async_returns_hybrid[0])
-            HandleSuspicious.SMA_started.remove(HandleSuspicious.SMA_started[0])
+            self.async_returns_hybridSMA.remove(self.async_returns_hybridSMA[0])
 
     def DMA(self):
-        if len(self.async_returns_hybrid) > 0 and self.async_returns_hybrid[1].ready() and HandleSuspicious.DMA_started[0]:
-            keepquarantine = self.async_returns_hybrid[1].get()
-
-            print("Your file %s is a clear file !\r" % self.scuffed_files[0])
-            print(" keep quarantine : %s \r" % str(keepquarantine))
+        if len(self.async_returns_hybridDMA) > 0 and self.async_returns_hybridDMA[0].ready() and self.scuffed_files_DMA[0]:
+            keepquarantine = self.async_returns_hybridDMA[0].get()
 
             if keepquarantine == 0:
-                os.remove(os.getcwd() + r"\\uploadServer\\" + self.scuffed_files[0])
-                quanrtineHandler.decrypt(self.folder_to_track, self.scuffed_files[0],
+                print("Your file %s is a clear file says DMA !\r" % self.scuffed_files_DMA[0])
+                os.remove(os.getcwd() + r"\\uploadServer\\" + self.scuffed_files_DMA[1])
+                quanrtineHandler.decrypt(self.folder_to_track, self.scuffed_files_DMA[0], self.scuffed_files_DMA[1],
                                          self.folder_documents)
 
             elif keepquarantine == 1:
-                print("Your file %s has been revealed to be a Ransomware/Malware !\r" % self.scuffed_files[0])
-                os.remove(getdownloadfolder() + r"\\" + self.scuffed_files[0])
-                os.remove(os.getcwd() + r"\\encryption\quarantineKey_" + self.scuffed_files[0] + '.skk')
-                quanrtineHandler.encrypt(os.getcwd() + r"\\uploadServer\\", self.scuffed_files[0],
-                                         self.scuffed_files[0])
+                print("Your file %s turned to be a Ransomware/Malware !\r" % self.scuffed_files_DMA[0])
+                os.remove(getdownloadfolder() + r"\\" + self.scuffed_files_DMA[0])
+                os.remove(os.getcwd() + r"\\encryption\quarantineKey_" + self.scuffed_files_DMA[0] + '.skk')
+                quanrtineHandler.encrypt(os.getcwd() + r"\\uploadServer\\", self.scuffed_files_DMA[1],
+                                         self.scuffed_files_DMA[0])
 
             else:
                 print("DMA status can't be established")
-            self.scuffed_files.remove(self.scuffed_files[0])
-            self.async_returns_hybrid.remove(self.async_returns_hybrid[0])
-            HandleSuspicious.DMA_started.remove(HandleSuspicious.DMA_started[0])
+                self.scuffed_files_SMA.remove(self.scuffed_files_DMA[0])
+                self.scuffed_files_SMA.remove(self.scuffed_files_DMA[1])
+
+            self.async_returns_hybridDMA.remove(self.async_returns_hybridDMA[0])
 
 
 def getdownloadfolder():
@@ -202,8 +233,9 @@ def start_observer(folder_to_track, folder_destination, folder_documents):
     """ MAIN """
 
     pool_hybrid_analysis = ThreadPool(processes=5)
-    async_returns_hybrid = []
-    event_handler = HandleSuspicious(folder_to_track, folder_destination, folder_documents, pool_hybrid_analysis, async_returns_hybrid)
+    async_returns_hybridSMA = []
+    async_returns_hybridDMA = []
+    event_handler = HandleSuspicious(folder_to_track, folder_destination, folder_documents, pool_hybrid_analysis, async_returns_hybridSMA, async_returns_hybridDMA)
     observer = Observer()
     observer.schedule(event_handler, path=folder_to_track, recursive=True)
     try:

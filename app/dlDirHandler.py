@@ -93,7 +93,7 @@ def set_chrome_reg_keys():
 
     if administrator_privilege():
         wreg = import_wreg()
-        username = getSessionUser.getuser('-info')
+        username = getSessionUser.getuser(0)
         try:
             try:
                 key = wreg.OpenKey(wreg.HKEY_LOCAL_MACHINE, "Software\\Policies\\Google\\Chrome", 0, wreg.KEY_ALL_ACCESS)
@@ -112,7 +112,7 @@ def set_chrome_reg_keys():
                 wreg.SetValueEx(key, 'DownloadDirectory', 0, wreg.REG_SZ, 'c:\\users\\' + username +
                                         '\\Downloads')
 
-            ()
+
             print(" *** KEYS SUCCESSFULLY ADDED TO REGISTRY ***")
             print("    ", wreg.QueryValueEx(key, 'DefaultDownloadDirectory'))
             print("    ", wreg.QueryValueEx(key, 'DownloadDirectory'))

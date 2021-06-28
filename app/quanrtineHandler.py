@@ -31,14 +31,14 @@ def encrypt(root, filename, incremented_filename):
         del encrypted
 
 
-def decrypt(root, filename, dst):
+def decrypt(root, filename, incremented_filename, dst):
     """ This function decrypt the file reading the quarantine key written
         in encryption folder and removes both key and encrypted file"""
 
     root = root + '\\'
     dst = dst + '\\'
 
-    with open(encryption_folder + 'quarantineKey_' + filename + '.skk', 'rb') as key:
+    with open(encryption_folder + 'quarantineKey_' + incremented_filename + '.skk', 'rb') as key:
         quarantine_key = key.read()
         f = Fernet(quarantine_key)
 
@@ -51,7 +51,7 @@ def decrypt(root, filename, dst):
         decrypted_file.write(decrypted)
 
     #  removing temp files
-    os.remove(encryption_folder + 'quarantineKey_' + filename + '.skk')
+    os.remove(encryption_folder + 'quarantineKey_' + incremented_filename + '.skk')
     os.remove(root + filename + '.skp')
 
 
