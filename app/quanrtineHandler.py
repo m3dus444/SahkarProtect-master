@@ -1,6 +1,5 @@
 import os
 from cryptography.fernet import Fernet
-import time
 
 
 def encrypt(root, filename, incremented_filename):

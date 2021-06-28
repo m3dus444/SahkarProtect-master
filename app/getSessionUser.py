@@ -7,6 +7,7 @@ We want the session user name opened to add correct path in registry dir for dlD
 
 """
 import sys
+#sys.path.insert(0,'C:/Users/julie/PycharmProjects/SahkarProtect-master/app')
 import time
 
 import win32api

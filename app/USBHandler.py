@@ -26,9 +26,7 @@
     aka letter A, it'll return 0, for letter B as well and C and D it returns 1. """
 
 
-import os
 import time
-import getSessionUser
 from ctypes import windll
 
 
@@ -57,15 +55,15 @@ def detect_flash_drive():
     subt_device = original - set(get_drive_status())
 
     if len(add_device):
-        print("There were %d" % (len(add_device)))
+        #print("There were %d" % (len(add_device)))
         for drive in add_device:
-            print("The drives added: %s." % drive)
+            #print("The drives added: %s." % drive)
             return drive + r':\\'
 
     elif len(subt_device):
-        print("There were %d" % (len(subt_device)))
+        #print("There were %d" % (len(subt_device)))
         for drive in subt_device:
-            print("The drives remove: %s." % drive)
+            print("The drives removed: %s." % drive)
 
 
 def looking_for_flash_drive():
