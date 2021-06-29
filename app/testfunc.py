@@ -46,6 +46,7 @@ print(c + c)
 
 
 """
+
 PYTHON_PATH = "D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe"
 ROOT = 'C:/Users/julie/PycharmProjects/SahkarProtect-master/app'
 #raw_s = r'{}'.format(s)
@@ -53,13 +54,16 @@ ROOT = 'C:/Users/julie/PycharmProjects/SahkarProtect-master/app'
 #'C:\\Users\\julie\\PycharmProjects\\SahkarProtect-master\\app\\configs\\chrome_config.txt'
 def to_raw(string):
     return fr"{string}"
+import extensions
 
-
+file='ppakdadaff.exe'
+#print(file[-4:])
+print(os.path.splitext(file)[1])
 from pathlib import Path
 
-dir2 = r'C:\Users\julie\Desktop\fgdg2.txt'
-dir = r'E:\\'
-time.sleep(5)
+#dir2 = r'C:\Users\julie\Desktop\fgdg2.txt'
+#dir = r'E:\\'
+#time.sleep(5)
 #print(os.path.isdir(dir))
 #print(os.listdir(dir))
 #open(r'C:\users\julie\Desktop\fgdg.txt', 'x')
@@ -71,8 +75,8 @@ time.sleep(5)
 #os.remove(r"E:\\fgdg.txt") -> yes
 #quanrtineHandler.encrypt(dir, 'fgdg.txt', 'fgdg.txt') -> yes
 #quanrtineHandler.decrypt(dir, 'fgdg.txt', dir)
-print("Owner id of the file:", os.stat(dir2).st_uid)
-print("Group id of the file:", os.stat(dir2).st_gid)
+"""print("Owner id of the file:", os.stat(dir2).st_uid)
+print("Group id of the file:", os.stat(dir2).st_gid)"""
 
 
 #regarder pk l'observer se lance pas avec la clef USB
