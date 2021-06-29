@@ -88,14 +88,6 @@ if __name__ == "__main__":
             if async_returns_USB_Handler.ready():
                 start_watchdog_over_flashdrive(async_returns_USB_Handler)
                 async_returns_USB_Handler = pool_USB_handler.apply_async(USBHandler.looking_for_flash_drive)
-                """new_flashdrive = async_returns_USB_Handler.get()
-                xprint()
-                print("A new FLASH DRIVE has been plugged in :", new_flashdrive)
-
-                async_flash_drives.append(pool_test.apply_async(
-                    SuspiciousHandler.start_observer, (new_flashdrive, folder_destination, folder_documents)))
-
-                async_returns_USB_Handler = pool_USB_handler.apply_async(USBHandler.looking_for_flash_drive)"""
             if len(async_flash_drives) > 0:
                 if async_flash_drives[0].ready:# this means flash drives was removed
                     async_flash_drives.remove(async_flash_drives[0])
@@ -111,7 +103,7 @@ if __name__ == "__main__":
             print("Process will terminate itself give us a moment...")
             time.sleep(2)
             print("Done.")
-            time.sleep(1)
+            time.sleep(0.65)
             canvas.display_ending()
             break
 

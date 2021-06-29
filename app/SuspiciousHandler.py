@@ -161,13 +161,13 @@ class HandleSuspicious(FileSystemEventHandler):
             sys.exit()
 
     def SMA(self):
-        try:
+        """try:
             print("len des reponses: ", len(self.async_returns_hybridSMA))
             print("status du premier elem: ", self.async_returns_hybridSMA[0])
             print("HandleSuspicious.SMA_started[0]: ", HandleSuspicious.SMA_started[0].ready())
             print("deleted or sent: ", HandleSuspicious.deleted_or_sent)
         except:
-            print("toutes les conditions ne sont pas réunies")
+            print("toutes les conditions ne sont pas réunies")"""
         if len(self.async_returns_hybridSMA) > 0 and self.async_returns_hybridSMA[0].ready() and self.scuffed_files_SMA[0]:
             keepquarantine = self.async_returns_hybridSMA[0].get()
             if keepquarantine == 0:
@@ -188,6 +188,7 @@ class HandleSuspicious(FileSystemEventHandler):
 
             else:
                 if keepquarantine == 1:
+                    xprint()
                     print("Your file %s has been revealed to be a Ransomware/Malware !\r" % self.scuffed_files_SMA[0])
                     os.remove(getdownloadfolder() + r"\\" + self.scuffed_files_SMA[0] + '.skp')
                     os.remove(os.getcwd() + r"\\encryption\quarantineKey_" + self.scuffed_files_SMA[0] + '.skk')
@@ -265,59 +266,6 @@ def start_observer(folder_to_track, folder_destination, folder_documents):
             event_handler.on_removed()
             time.sleep(5)
             event_handler.SMA()
-
-            r"""try:
-                print("len des reponses: ", len(event_handler.async_returns_hybridSMA))
-                print("status du premier elem: ", event_handler.async_returns_hybridSMA[0])
-                print("HandleSuspicious.SMA_started[0]: ", HandleSuspicious.SMA_started[0].ready())
-                print("deleted or sent: ", HandleSuspicious.deleted_or_sent)
-            except:
-                print("toutes les conditions ne sont pas réunies")
-            if len(event_handler.async_returns_hybridSMA) > 0 and event_handler.async_returns_hybridSMA[0].ready() and \
-                    event_handler.scuffed_files_SMA[0]:
-                keepquarantine = event_handler.async_returns_hybridSMA[0].get()
-                if keepquarantine == 0:
-                    if (event_handler.scuffed_files_SMA[0])[+4:] == '.exe':
-                        event_handler.async_returns_hybridDMA.append(
-                            event_handler.pool_hybrid_analysis.apply_async(server.execute_analysis, (
-                                "sandbox_file", None, event_handler.scuffed_files_SMA[1])))
-                        event_handler.scuffed_files_DMA.append(event_handler.scuffed_files_SMA[0])
-                        event_handler.scuffed_files_DMA.append(event_handler.scuffed_files_SMA[1])
-                        print("Your file %s has been sent for DMA" % event_handler.scuffed_files_SMA[0])
-                        event_handler.scuffed_files_SMA.remove(event_handler.scuffed_files_SMA[0])
-                        event_handler.scuffed_files_SMA.remove(event_handler.scuffed_files_SMA[1])
-                    else:
-                        quanrtineHandler.decrypt(event_handler.folder_to_track, event_handler.scuffed_files_SMA[0], event_handler.folder_documents)
-                        os.remove(os.getcwd() + r"\\uploadServer\\" + event_handler.scuffed_files_SMA[1])
-                        print("Your file %s is a clear file !\r" % event_handler.scuffed_files_SMA[0])
-                        event_handler.scuffed_files_SMA.remove(event_handler.scuffed_files_SMA[0])
-                        event_handler.scuffed_files_SMA.remove(event_handler.scuffed_files_SMA[0])
-                        print("scuffed-files : ", event_handler.scuffed_files_SMA)
-                        print("scuffed-files : ", event_handler.scuffed_files_SMA)
-                        print("encryption fodler: ",
-                              os.listdir(r"C:\Users\julie\PycharmProjects\SahkarProtect-master\app\encryption"))
-                        print("ulpoadserver folder: ",
-                              os.listdir(r"C:\Users\julie\PycharmProjects\SahkarProtect-master\app\uploadServer"))
-
-                else:
-                    if keepquarantine == 1:
-                        print(
-                            "Your file %s has been revealed to be a Ransomware/Malware !\r" % event_handler.scuffed_files_SMA[0])
-                        os.remove(getdownloadfolder() + r"\\" + event_handler.scuffed_files_SMA[0] + '.skp')
-                        os.remove(os.getcwd() + r"\\encryption\quarantineKey_" + event_handler.scuffed_files_SMA[0] + '.skk')
-                        quanrtineHandler.encrypt(os.getcwd() + r"\\uploadServer\\", event_handler.scuffed_files_SMA[1])
-                        event_handler.scuffed_files_SMA.remove(event_handler.scuffed_files_SMA[0])
-                        event_handler.scuffed_files_SMA.remove(event_handler.scuffed_files_SMA[1])
-
-                    else:
-                        print("SMA status of your file %s can't be established" % event_handler.scuffed_files_SMA[0])
-                        
-                        event_handler.scuffed_files_SMA.remove(event_handler.scuffed_files_SMA[0])
-                        event_handler.scuffed_files_SMA.remove(event_handler.scuffed_files_SMA[1])
-
-                event_handler.async_returns_hybridSMA.remove(event_handler.async_returns_hybridSMA[0])
-                print("SUCCEDED")"""
-
             event_handler.DMA()
             print_count += 1
             if print_count % 5 == 0:
