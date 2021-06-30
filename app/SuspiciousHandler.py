@@ -43,7 +43,6 @@ class HandleSuspicious(FileSystemEventHandler):
 
     def on_modified(self, event):
         """ This function run itself when the folder/subfolder/file in folder is moved in/ modified"""
-        print("ON MIDIFIED")
         if os.path.isdir(self.folder_to_track):
             for filename in os.listdir(self.folder_to_track):
                 i = 1
@@ -93,7 +92,7 @@ class HandleSuspicious(FileSystemEventHandler):
 
                     shutil.move(src, dst)
                     #shutil.move(r"E:\\fgdg.txt", r"C:\users\julie\Desktop\fgdg2.txt") -> yes
-                    time.sleep(0.25)
+                    time.sleep(0.05)
 
                     """ SENDING FOR SMA"""
                     self.async_returns_hybridSMA.append(self.pool_hybrid_analysis.apply_async(server.execute_analysis, (
@@ -106,7 +105,6 @@ class HandleSuspicious(FileSystemEventHandler):
             self.on_deleted(event)
 
     def on_deleted(self, event):
-        print("ON DELETED")
 
         """ If client delete download folder, it recreate itself automatically and restart the script
             Plus, it also run itself every time a file is sent for DMA in on_modified function because
