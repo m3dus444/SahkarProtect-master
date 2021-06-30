@@ -9,7 +9,7 @@ setup(name="SAKHAR Protect",
                         "requests",
                         "Werkzeug",
                         "watchdog",
-                        "pypiwin32",
+                        "pypiwin32"
                         "pywin32",
                         "cryptography"]
       )

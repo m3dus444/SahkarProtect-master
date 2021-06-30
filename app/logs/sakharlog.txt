@@ -139,3 +139,6 @@
 2021-06-30 09:47:23.566466{'ip address': '172.16.0.4', 'nom': 'Prezi.Next-x64-1.35.0.0.exe', 'taille': 535756144, 'date de creation': 'Mon Jun 28 15:18:47 2021', 'date de modification': 'Mon Jun 28 15:19:10 2021'}
 2021-06-30 09:50:07.104753{'ip address': '172.16.0.4', 'nom': 'readme2_html.html', 'taille': 4334, 'date de creation': 'Wed Jun 30 09:49:51 2021', 'date de modification': 'Thu Jun 10 14:04:14 2021'}
 2021-06-30 09:50:16.462767{'ip address': '172.16.0.4', 'nom': 'readme2_html.html', 'result': 0}
+2021-06-30 10:49:30.832522{'ip address': '172.16.0.4', 'nom': 'Macro-planning.xlsx', 'taille': 27124, 'date de creation': 'Wed Jun 30 10:49:16 2021', 'date de modification': 'Thu Jun 10 14:03:42 2021'}
+2021-06-30 10:52:18.283698{'ip address': '172.16.0.4', 'nom': 'readme_html.html', 'taille': 9309, 'date de creation': 'Wed Jun 30 10:52:03 2021', 'date de modification': 'Thu Jun 10 14:03:50 2021'}
+2021-06-30 10:52:27.609842{'ip address': '172.16.0.4', 'nom': 'readme_html.html', 'result': 0}
