@@ -1,0 +1,7 @@
+colorama>=0.4.4
+requests>=2.25.1
+Werkzeug>=2.0.1
+watchdog>=2.1.2
+pypiwin32>=223
+pywin32>=301
+cryptography>=3.4.7
