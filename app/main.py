@@ -98,7 +98,7 @@ if __name__ == "__main__":
             del pool_USB_handler
             del pool_suspicious_handler
             del pool_test
-            xprint()
+            xprint('swapping')
             print("Thanks for using our solution. See you soon.")
             print("Process will terminate itself give us a moment...")
             time.sleep(2)

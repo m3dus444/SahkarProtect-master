@@ -21,7 +21,6 @@
 
 
 from multiprocessing.pool import ThreadPool
-import white
 import time
 import SuspiciousHandler
 from sys import getsizeof

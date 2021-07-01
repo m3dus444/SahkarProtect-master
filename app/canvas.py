@@ -1,17 +1,36 @@
 import os
 import time
+import SuspiciousHandler
 
-def xprint():
+def xprint(mode):
     time.sleep(0.1)
-    display_swapping(1, 1.0)
-    #print('\n' * 10)
+    if mode == 'swapping':
+        display_swapping(1, 1.0)
+    elif mode == 'jump':
+        print('\n' * 10)
     display_canvas(1)
 
 
 class xprintt():
-    def __init__(self):
-        xprint()
-        # do stuff
+    additional_information = {}
+    def __init__(self, folder_to_track, folder_destination, folder_document, user, date_run):
+        self.folder_to_track = folder_to_track
+        self.folder_destination = folder_destination
+        self.folder_document = folder_document
+        self.user = user
+        self.date_run = date_run
+
+    def xprinting(self, mode):
+        xprint(mode)
+        print("\tWatchdog over :\t", self.folder_to_track)
+        print("\tUploadServer location: \t", self.folder_destination)
+        print("\tClear file location:\t", self.folder_document)
+        print("\tScript launched by:\t", self.user)
+        print("\tAt:\t", self.date_run)
+
+
+
+
 
 def xprinttest():
     if os.path.isfile(os.getcwd() + r'\configs\xprintcounter.txt'):

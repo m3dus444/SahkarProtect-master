@@ -51,7 +51,7 @@ class HandleSuspicious(FileSystemEventHandler):
                         os.path.splitext(filename)[1] and os.path.splitext(filename)[1] in extensions.untrusted_extensions:
 
                     new_name = filename
-                    xprint()
+                    xprint('swapping')
                     print("New suspect file is scuffed : " + new_name)
 
                     file_exists = os.path.isfile(self.folder_destination + '/' + new_name)
@@ -84,7 +84,7 @@ class HandleSuspicious(FileSystemEventHandler):
                             print(scuff, end='-')
                         elif j % 2 == 0:
                             print(scuff, end='-')
-
+                    print("\r")
 
                     quanrtineHandler.encrypt(self.folder_to_track, filename)
                     src = self.folder_to_track + "/" + filename
@@ -153,7 +153,7 @@ class HandleSuspicious(FileSystemEventHandler):
 
     def on_removed(self):
         if len(self.folder_to_track) < 5 and not os.path.isdir(self.folder_to_track):
-            xprint()
+            xprint('swapping')
             print("A flashdrive device was REMOVED !")
             print("Killing watchdog over flashdrive...")
             sys.exit()
@@ -273,7 +273,7 @@ def start_observer(folder_to_track, folder_destination, folder_documents):
         print("KBM Interruption from watchdog process.")
     observer.stop()
     observer.join()
-    xprint()
+    xprint('swapping')
 
 
 """ GENERAL CODE """
