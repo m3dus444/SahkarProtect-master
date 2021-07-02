@@ -13,12 +13,12 @@ import SuspiciousHandler
 
 class xprinter():
     additional_information = {
+            "Script information": [],
             "Awaken watchdogs": [],
             "Scuffed files": [],
             "SMA files": [],
             "DMA files": [],
             "Analysed files": [],
-            "Script information": [],
             "Errors": [],
             "Others": []
         }
@@ -52,14 +52,15 @@ class xprinter():
             self.working = 1
             self.xprint(mode)
             print("\tScript launched by:\t", self.user)
-            print("At : " + str(self.execdate[0]) + "h " + str(self.execdate[1]) + "min " + str(self.execdate[2]) + "sec ")
-            print("\tUploadServer location : \t", self.folder_destination)
+            print("\tAt : " + str(self.execdate[0]) + "h " + str(self.execdate[1]) + "min " + str(self.execdate[2]) + "sec \t")
+            print("\tUploadServer location :\t", self.folder_destination)
             print("\tClear file location :\t", self.folder_document)
-            print("\tAdditional informations :\t", self.user)
+            print("\tAdditional informations :\n")
             for additional in self.additional_information:
-                print(additional + ":")
-                for info in self.additional_information[additional]:
-                    print(info)
+                if len(self.additional_information[additional]):# != 0:
+                    print("\t•" + additional + ":")
+                    for info in self.additional_information[additional]:
+                        print("\t\t" + info)
             self.working = 0
             self.del_script_info() #throw all information away after printing them
         else:
@@ -72,6 +73,8 @@ class xprinter():
             self.additional_information["Script information"].remove(info)
         else:
             del self.additional_information["Script information"][:]
+            del self.additional_information["Others"][:]
+            del self.additional_information["Errors"][:]
 
 
 

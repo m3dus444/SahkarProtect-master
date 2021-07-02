@@ -21,15 +21,14 @@ def checking_configuration():
 
     while not chrome_configured_state or not regedit_configured_state:
         if not dlDirHandler.administrator_privilege():
-            print('\t ** At first start, this script requires to be ran with admin privileges **\t')
+            sakharprinter.additional_information["Errors"].append("** \tAt first start, this script requires to be ran with admin privileges **\t")
             sys.exit()
         else:
             dlDirHandler.set_chrome_corp_mode()
             dlDirHandler.set_chrome_reg_keys()
             configuration_tries += 1
             if configuration_tries == 3:
-                xprint()
-                print("Too many config tries, something's causing a bug.")
+                sakharprinter.additional_information["Errors"].append("\tToo many config tries, something's causing a bug.\t")
                 sys.exit()
 
     del chrome_configured_state
@@ -40,7 +39,7 @@ def checking_configuration():
 def start_watchdog_over_flashdrive(async_returns_USB_Handler):
     new_flashdrive = async_returns_USB_Handler.get()
     sakharprinter.additional_information["Awaken watchdog"].append(new_flashdrive)
-    print("A new FLASH DRIVE has been plugged in :", new_flashdrive)
+    sakharprinter.additional_information["Script information"].append(eval(r"str('A new FLASH DRIVE has been plugged in : %s' % new_flashdrive')"))
 
     """ This one below works properly. But it cannot stop itself when USB is plugged out """
     async_flash_drives.append(pool_test.apply_async(
@@ -66,11 +65,11 @@ if __name__ == "__main__":
     folder_destination = os.getcwd() + r'\uploadServer'
     folder_documents = r'C:\users\\' + getSessionUser.getuser(0) + r'\Documents'
     folder_device = ''
-    additional_information = []
     sakharprinter = canvas.xprinter(folder_destination, folder_documents, getSessionUser.getuser(0), time.localtime())
 
     """ SCRIPT INFORMATION"""
     sakharprinter.xprinting('swapping')
+    time.sleep(2)
 
     """ LAUNCHING PROCESSES """
 
@@ -78,7 +77,7 @@ if __name__ == "__main__":
         SuspiciousHandler.start_observer, (folder_to_track, folder_destination, folder_documents, sakharprinter))
 
     async_returns_USB_Handler = pool_USB_handler.apply_async(
-        USBHandler.looking_for_flash_drive)
+        USBHandler.looking_for_flash_drive(sakharprinter))
 
     """ MAIN LOOP """
 
@@ -87,7 +86,7 @@ if __name__ == "__main__":
             """ CHECKING FLASHDRIVE """
             if async_returns_USB_Handler.ready():
                 start_watchdog_over_flashdrive(async_returns_USB_Handler)
-                async_returns_USB_Handler = pool_USB_handler.apply_async(USBHandler.looking_for_flash_drive)
+                async_returns_USB_Handler = pool_USB_handler.apply_async(USBHandler.looking_for_flash_drive(sakharprinter))
             if len(async_flash_drives) > 0:
                 if async_flash_drives[0].ready:# this means flash drives was removed
                     sakharprinter.additional_information["Awaken watchdog"].remove(async_flash_drives[0].get())

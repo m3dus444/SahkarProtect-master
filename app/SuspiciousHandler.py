@@ -39,10 +39,11 @@ class HandleSuspicious(FileSystemEventHandler):
         self.sakharprinter = sakharprinter
         self.sakharprinter.add_script_info(eval(r"str('A new watchdog is awake !\r')"))
         self.sakharprinter.additional_information["Awaken watchdogs"].append(self.folder_to_track)
-        self.sakharprinter.xprinting('swapping')
+        #self.sakharprinter.xprinting('swapping')
 
     def on_modified(self, event):
         """ This function run itself when the folder/subfolder/file in folder is moved in/ modified"""
+        print("ON MODIFIED")
         if os.path.isdir(self.folder_to_track):
             for filename in os.listdir(self.folder_to_track):
                 i = 1
@@ -267,7 +268,8 @@ def start_observer(folder_to_track, folder_destination, folder_documents, xprint
     observer.schedule(event_handler, path=folder_to_track, recursive=True)
     try:
         observer.start()
-        time.sleep(2)
+        time.sleep(0.25)
+        event_handler.on_modified(event=None) #we try to force on_modified to check if there is already files in dir/flashdrive
     except:
         observer.stop()
         print(observer.join())

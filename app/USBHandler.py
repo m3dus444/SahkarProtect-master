@@ -47,7 +47,7 @@ def get_drive_status():
     return devices
 
 
-def detect_flash_drive():
+def detect_flash_drive(sakharprinter):
 
     original = set(get_drive_status())
     time.sleep(1)
@@ -63,23 +63,19 @@ def detect_flash_drive():
     elif len(subt_device):
         #print("There were %d" % (len(subt_device)))
         for drive in subt_device:
-            print("The drives removed: %s." % drive)
+            sakharprinter.additional_information["Script information"].append(eval(r"str('The drives removed: %s'%drive)"))
+    return 'no'
 
-
-def looking_for_flash_drive():
-    i = 0
-    time.sleep(5)  # we wait for other xprint to come first (watchdog's one)
-    print('Looking for flashdrive...')
-    new_device = False
-    while not new_device:
-        new_device = detect_flash_drive()
-        i += 1
-        if i % 10 == 0:
-            print('Looking for flashdrive...')
+def looking_for_flash_drive(sakharprinter):
+    new_device = detect_flash_drive(sakharprinter)
+    while new_device == 'no':
+        new_device = detect_flash_drive(sakharprinter)
+        if "Looking for flashdrive..." not in sakharprinter.additional_information["Others"]:
+            sakharprinter.additional_information["Others"].append("Looking for flashdrive...")
     return new_device
 
 
-""" Local Variabkes"""
+""" Local Variables"""
 
 uppercase_letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
                     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']

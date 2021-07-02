@@ -74,6 +74,7 @@ def executeScan(cmd_arguments):
     stdout = result.stdout
     stderr = result.stderr
     print(stderr)
+    print(stdout)
     #stdout = stdout[:-4]
     scan_id = json.loads(stdout)["id"]
     job_done = False
@@ -138,6 +139,7 @@ def getScanResult(scan_id):
     result = subprocess.run(cmd, capture_output=True, text=True)
     stdout = result.stdout
     stderr = result.stderr
+    print(stdout)
     #stdout = stdout[:-4]
     status = json.loads(stdout)
     status = status["scanners"]

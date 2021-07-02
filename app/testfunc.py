@@ -100,7 +100,7 @@ addinfo = []
 #addinfo.append(eval(print(("The nameis so : ", name))))
 print(addinfo)
 
-addinfo.append(eval(r"str(r'The letter %s is' a' beautifu'l watchdog ! \n' %x.d['watchdog'][0])"))
+addinfo.append(eval(r"str('The letter %s is a beautiful watchdog ! \n' %x.d['watchdog'][0])"))
 #val("The name %s is a beautiful name ! %name")
 print(2)
 print(addinfo[0])
@@ -108,7 +108,8 @@ if x.printer(1):
     print("nooo")
 
 
-
+kk = r"E:\\"
+print(format(kk, ))
 
 #dir2 = r'C:\Users\julie\Desktop\fgdg2.txt'
 #dir = r'E:\\'
