@@ -13,7 +13,6 @@ import getSessionUser
 import quanrtineHandler
 from multiprocessing.pool import ThreadPool
 import server
-from canvas import xprint as xprint
 import extensions
 
 
@@ -30,29 +29,29 @@ class HandleSuspicious(FileSystemEventHandler):
     SMA_started = []
     DMA_started = []
 
-    def __init__(self, folder_to_track, folder_destination, folder_documents, pool_hybrid_analysis, async_returns_hybridSMA, async_returns_hybridDMA):
+    def __init__(self, folder_to_track, folder_destination, folder_documents, pool_hybrid_analysis, async_returns_hybridSMA, async_returns_hybridDMA, sakharprinter):
         self.folder_to_track = folder_to_track
         self.folder_destination = folder_destination
         self.folder_documents = folder_documents
         self.pool_hybrid_analysis = pool_hybrid_analysis
         self.async_returns_hybridSMA = async_returns_hybridSMA
         self.async_returns_hybridDMA = async_returns_hybridDMA
-        xprint()
-        print("A new watchdog is awake !\r")
-        print("Looking for suspicious files on : %s...\r" % folder_to_track)
+        self.sakharprinter = sakharprinter
+        self.sakharprinter.add_script_info(eval(r"str('A new watchdog is awake !\r')"))
+        self.sakharprinter.additional_information["Awaken watchdogs"].append(self.folder_to_track)
+        self.sakharprinter.xprinting('swapping')
 
     def on_modified(self, event):
         """ This function run itself when the folder/subfolder/file in folder is moved in/ modified"""
         if os.path.isdir(self.folder_to_track):
             for filename in os.listdir(self.folder_to_track):
                 i = 1
-                #dontcare, extension = os.path.splitext(filename)
                 if filename != self.folder_to_track and filename != 'System Volume Information' and '.skp' != \
                         os.path.splitext(filename)[1] and os.path.splitext(filename)[1] in extensions.untrusted_extensions:
 
                     new_name = filename
-                    xprint('swapping')
-                    print("New suspect file is scuffed : " + new_name)
+                    self.sakharprinter.add_script_info(eval(r"str('New suspect file is scuffed : ' + filename)"))
+                    self.sakharprinter.additional_information["Scuffed files"].append(filename)
 
                     file_exists = os.path.isfile(self.folder_destination + '/' + new_name)
                     while file_exists:
@@ -77,18 +76,13 @@ class HandleSuspicious(FileSystemEventHandler):
 
                     self.scuffed_files_SMA.append(filename)
                     self.scuffed_files_SMA.append(new_name)
-                    print(" List of current scuffed files : ")
-                    j = 0
-                    for scuff in self.scuffed_files_SMA:
-                        if j == 0:
-                            print(scuff, end='-')
-                        elif j % 2 == 0:
-                            print(scuff, end='-')
-                    print("\r")
+                    self.sakharprinter.additional_information["SMA files"].append(filename)
 
                     quanrtineHandler.encrypt(self.folder_to_track, filename)
                     src = self.folder_to_track + "/" + filename
                     dst = self.folder_destination + "/" + new_name
+                    self.sakharprinter.add_script_info(eval(
+                        r"str('Your file %s has been locked until its got checked.\r' % filename)"))
 
                     shutil.move(src, dst)
                     #shutil.move(r"E:\\fgdg.txt", r"C:\users\julie\Desktop\fgdg2.txt") -> yes
@@ -97,12 +91,14 @@ class HandleSuspicious(FileSystemEventHandler):
                     """ SENDING FOR SMA"""
                     self.async_returns_hybridSMA.append(self.pool_hybrid_analysis.apply_async(server.execute_analysis, (
                                 "quick_scan_file", None, new_name)))
-                    print("Your file has been sent for SMA and DMA. You'll get it back in /Documents/ once checked.\r")
+                    self.sakharprinter.add_script_info(eval(r"str('Your file has been sent for SMA. You will get it back in /Documents/ once checked.\r')"))
 
 
         else:
-            print("Watchdog CAN'T see the folder to track anymore! \r")
-            self.on_deleted(event)
+            self.sakharprinter.add_script_info(eval(r"str('Watchdog CANT see the folder %s anymore! \r' % self.folder_to_track)"))
+            self.on_deleted(event) #we call on deleted in order to see what's causing this issue
+
+        self.sakharprinter.xprinting('swapping')
 
     def on_deleted(self, event):
 
@@ -115,8 +111,8 @@ class HandleSuspicious(FileSystemEventHandler):
             time.sleep(0.1) #we wait because
             if getSessionUser.getuser(0) in self.folder_to_track and not os.path.isdir(self.folder_to_track):
                 os.mkdir(path=self.folder_to_track, mode=0o777)
-                print("Don't try to delete that folder ! ")
-                print(" Folder restored, restarting process... ")
+                self.sakharprinter.add_script_info(eval(r"str('Don't try to delete that folder !')"))
+                self.sakharprinter.add_script_info(eval(r"str('Folder restored, restarting process... ')"))
                 #start_observer(self.folder_to_track, self.folder_destination, self.folder_documents)
 
         except:
@@ -153,10 +149,11 @@ class HandleSuspicious(FileSystemEventHandler):
 
     def on_removed(self):
         if len(self.folder_to_track) < 5 and not os.path.isdir(self.folder_to_track):
-            xprint('swapping')
-            print("A flashdrive device was REMOVED !")
-            print("Killing watchdog over flashdrive...")
-            sys.exit()
+            #xprint('swapping')
+            self.sakharprinter.add_script_info(eval(r"str('A flashdrive device was REMOVED !')"))
+            self.sakharprinter.add_script_info(eval(r"str('Killing watchdog over flashdrive...')"))
+            return self.folder_to_track
+            #sys.exit()
 
     def SMA(self):
         """try:
@@ -170,37 +167,54 @@ class HandleSuspicious(FileSystemEventHandler):
             keepquarantine = self.async_returns_hybridSMA[0].get()
             if keepquarantine == 0:
                 if (self.scuffed_files_SMA[0])[-4:] == '.exe':
+                    #sending dma + setting printing + add/remove
                     self.async_returns_hybridDMA.append(self.pool_hybrid_analysis.apply_async(server.execute_analysis, (
                             "sandbox_file", None, self.scuffed_files_SMA[1])))
                     self.scuffed_files_DMA.append(self.scuffed_files_SMA[0])
                     self.scuffed_files_DMA.append(self.scuffed_files_SMA[1])
-                    print("Your file %s has been sent for DMA" % self.scuffed_files_SMA[0])
+                    self.sakharprinter.additional_information["DMA files"].append(self.scuffed_files_SMA[0])
+                    self.sakharprinter.additional_information["SMA files"].remove(self.scuffed_files_SMA[0])
+                    self.sakharprinter.add_script_info(eval(r"str('Your file %s  has been sent for DMA' % self.scuffed_files_SMA[0])"))
                     self.scuffed_files_SMA.remove(self.scuffed_files_SMA[0])
                     self.scuffed_files_SMA.remove(self.scuffed_files_SMA[0])
+                    #printing
+                    #self.sakharprinter.xprinting('swapping')
                 else:
                     quanrtineHandler.decrypt(self.folder_to_track, self.scuffed_files_SMA[0], self.folder_documents)
                     os.remove(os.getcwd() + r"\\uploadServer\\" + self.scuffed_files_SMA[1])
-                    print("Your file %s is a clear file !\r" % self.scuffed_files_SMA[0])
+                    #setting printing and add/remove
+                    self.sakharprinter.additional_information["SMA files"].remove(self.scuffed_files_SMA[0])
+                    self.sakharprinter.add_script_info(eval(r"str('Your file %s is a clear file says SMA!\r' % self.scuffed_files_SMA[0])"))
+                    self.sakharprinter.add_script_info(eval(r"str('%s is no longer scuffed!\r' % self.scuffed_files_SMA[0])"))
                     self.scuffed_files_SMA.remove(self.scuffed_files_SMA[0])
                     self.scuffed_files_SMA.remove(self.scuffed_files_SMA[0])
+                    #priting
+                    #self.sakharprinter.xprinting('swapping')
 
             else:
                 if keepquarantine == 1:
-                    xprint()
-                    print("Your file %s has been revealed to be a Ransomware/Malware !\r" % self.scuffed_files_SMA[0])
+
                     os.remove(getdownloadfolder() + r"\\" + self.scuffed_files_SMA[0] + '.skp')
                     os.remove(os.getcwd() + r"\\encryption\quarantineKey_" + self.scuffed_files_SMA[0] + '.skk')
                     quanrtineHandler.encrypt(os.getcwd() + r"\\uploadServer\\", self.scuffed_files_SMA[1])
+
+                    self.sakharprinter.add_script_info(eval(r"str('Your file %s has been revealed to be a Ransomware/Malware !\r' % self.scuffed_files_SMA[0])"))
+                    self.sakharprinter.additional_information["SMA files"].remove(self.scuffed_files_SMA[0])
                     self.scuffed_files_SMA.remove(self.scuffed_files_SMA[0])
                     self.scuffed_files_SMA.remove(self.scuffed_files_SMA[0])
+                    # self.sakharprinter.xprinting('swapping')
 
                 else:
-                    print("SMA status of your file %s can't be established" % self.scuffed_files_SMA[0])
+                    self.sakharprinter.add_script_info(eval(r"str('SMA status of your file %s can't be established' % self.scuffed_files_SMA[0])"))
+                    self.sakharprinter.add_script_info(eval(r"str('Giving up... ')"))
                     """ if .exe call DMA"""
+                    self.sakharprinter.additional_information["SMA files"].remove(self.scuffed_files_SMA[0])
                     self.scuffed_files_SMA.remove(self.scuffed_files_SMA[0])
                     self.scuffed_files_SMA.remove(self.scuffed_files_SMA[0])
+                    #self.sakharprinter.xprinting('swapping')
 
             self.async_returns_hybridSMA.remove(self.async_returns_hybridSMA[0])
+            self.sakharprinter.xprinting('swapping')
 
     def DMA(self):
         if len(self.async_returns_hybridDMA) > 0 and self.async_returns_hybridDMA[0].ready() and self.scuffed_files_DMA[0]:
@@ -241,14 +255,14 @@ def getdownloadfolder():
     return wreg.QueryValueEx(key, 'DefaultDownloadDirectory')[0]
 
 
-def start_observer(folder_to_track, folder_destination, folder_documents):
+def start_observer(folder_to_track, folder_destination, folder_documents, xprinter):
 
     """ MAIN """
 
     pool_hybrid_analysis = ThreadPool(processes=5)
     async_returns_hybridSMA = []
     async_returns_hybridDMA = []
-    event_handler = HandleSuspicious(folder_to_track, folder_destination, folder_documents, pool_hybrid_analysis, async_returns_hybridSMA, async_returns_hybridDMA)
+    event_handler = HandleSuspicious(folder_to_track, folder_destination, folder_documents, pool_hybrid_analysis, async_returns_hybridSMA, async_returns_hybridDMA, xprinter)
     observer = Observer()
     observer.schedule(event_handler, path=folder_to_track, recursive=True)
     try:
@@ -259,26 +273,27 @@ def start_observer(folder_to_track, folder_destination, folder_documents):
         print(observer.join())
 
     try:
-        print_count = 0
+        #print_count = 0
         while True:
-            event_handler.on_removed()
-            time.sleep(5)
+            if event_handler.on_removed():
+                return event_handler.on_removed()
+            #time.sleep(5)
             event_handler.SMA()
             event_handler.DMA()
-            print_count += 1
-            if print_count % 5 == 0:
-                print("Looking for suspicious files on : %s...\r" % folder_to_track)
-                print_count = 0
+            #print_count += 1
+            #if print_count % 5 == 0:
+                #print("Looking for suspicious files on : %s...\r" % folder_to_track)
+                #print_count = 0
     except KeyboardInterrupt:
         print("KBM Interruption from watchdog process.")
     observer.stop()
     observer.join()
-    xprint('swapping')
+    #xprint('swapping')
 
 
 """ GENERAL CODE """
 if __name__ == '__main__':
     if len(sys.argv) > 2:
-        start_observer(sys.argv[1], sys.argv[2], sys.argv[3])
+        start_observer(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
     else:
         print("Arguments missing ! \n")

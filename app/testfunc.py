@@ -6,7 +6,7 @@ import shutil
 """a = os.getcwd() + r'\configs'
 config_folder = fr"{a}"
 print(config_folder)"""
-import SuspiciousHandler
+#import SuspiciousHandler
 
 #a = os.getcwd() + r'\configs'
 #a.encode('unicode_escape')
@@ -56,10 +56,59 @@ def to_raw(string):
     return fr"{string}"
 import extensions
 
-file='ppakdadaff.exe'
-#print(file[-4:])
-print(os.path.splitext(file)[1])
-from pathlib import Path
+
+def increment(x):
+    x.append(2)
+
+a = [100]
+print(isinstance(a, object))
+increment(a)
+print(a)
+print(time.time())
+print(str(time.localtime()[3]) + "h " + str(time.localtime()[4]) + "min " + str(time.localtime()[5]) + "sec ")
+
+class teton():
+    d = {
+            "watchdog" : ["a", "b"],
+            "scuffed files" : ["c", "d"],
+            "SMA_files" : ["e", "f"],
+            "DMA_files" : ["g", "h"],
+            "cleared_files" : ["i", "j"]
+        }
+    def __init__(self, var):
+        self.var = var
+    def printer(self, mode):
+        if mode == 1:
+            print("yes")
+
+a = [3,7,6,4,5,0,6,5]
+name = " JULIEN "
+x = teton(a)
+x.var.append(4)
+for time in x.var:
+    print("\t" + str(time) + "\t")
+
+print(isinstance(x, object))
+x.printer(1)
+
+for additional in x.d:
+    print(additional + ":")
+    for info in x.d[additional]:
+        print(info  +"\r")
+print(a)
+addinfo = []
+#addinfo.append(eval(print(("The nameis so : ", name))))
+print(addinfo)
+
+addinfo.append(eval(r"str(r'The letter %s is' a' beautifu'l watchdog ! \n' %x.d['watchdog'][0])"))
+#val("The name %s is a beautiful name ! %name")
+print(2)
+print(addinfo[0])
+if x.printer(1):
+    print("nooo")
+
+
+
 
 #dir2 = r'C:\Users\julie\Desktop\fgdg2.txt'
 #dir = r'E:\\'

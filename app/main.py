@@ -11,7 +11,7 @@ import confHandler
 import dlDirHandler
 import getSessionUser
 import canvas
-from canvas import xprint as xprint
+#from canvas import xprint as xprint
 
 
 def checking_configuration():
@@ -21,8 +21,7 @@ def checking_configuration():
 
     while not chrome_configured_state or not regedit_configured_state:
         if not dlDirHandler.administrator_privilege():
-            xprint()
-            print('At first start, this script requires to be ran with admin privileges')
+            print('\t ** At first start, this script requires to be ran with admin privileges **\t')
             sys.exit()
         else:
             dlDirHandler.set_chrome_corp_mode()
@@ -40,15 +39,16 @@ def checking_configuration():
 
 def start_watchdog_over_flashdrive(async_returns_USB_Handler):
     new_flashdrive = async_returns_USB_Handler.get()
-    xprint()
+    sakharprinter.additional_information["Awaken watchdog"].append(new_flashdrive)
     print("A new FLASH DRIVE has been plugged in :", new_flashdrive)
 
     """ This one below works properly. But it cannot stop itself when USB is plugged out """
     async_flash_drives.append(pool_test.apply_async(
-        SuspiciousHandler.start_observer, (new_flashdrive, folder_destination, folder_documents)))
+        SuspiciousHandler.start_observer, (new_flashdrive, folder_destination, folder_documents, sakharprinter)))
 
 
 if __name__ == "__main__":
+
     print('\n' * 40)
     canvas.display_loading(2)
 
@@ -66,21 +66,21 @@ if __name__ == "__main__":
     folder_destination = os.getcwd() + r'\uploadServer'
     folder_documents = r'C:\users\\' + getSessionUser.getuser(0) + r'\Documents'
     folder_device = ''
+    additional_information = []
+    sakharprinter = canvas.xprinter(folder_destination, folder_documents, getSessionUser.getuser(0), time.localtime())
 
-    """ SYS INFORMATION"""
-    xprint()
-    print(getSessionUser.getuser('--info'))
-    print("Documents folder loaded: ", folder_documents)
-    print("Download folder loaded: ", folder_to_track)
-    print("Server folder loaded: ", folder_destination)
-    print("Launching processes...")
-    time.sleep(3)
+    """ SCRIPT INFORMATION"""
+    sakharprinter.xprinting('swapping')
+
+    """ LAUNCHING PROCESSES """
 
     asyncnever_returns_Sus_Handler = pool_suspicious_handler.apply_async(
-        SuspiciousHandler.start_observer, (folder_to_track, folder_destination, folder_documents))
+        SuspiciousHandler.start_observer, (folder_to_track, folder_destination, folder_documents, sakharprinter))
 
     async_returns_USB_Handler = pool_USB_handler.apply_async(
         USBHandler.looking_for_flash_drive)
+
+    """ MAIN LOOP """
 
     while True:
         try:
@@ -90,6 +90,7 @@ if __name__ == "__main__":
                 async_returns_USB_Handler = pool_USB_handler.apply_async(USBHandler.looking_for_flash_drive)
             if len(async_flash_drives) > 0:
                 if async_flash_drives[0].ready:# this means flash drives was removed
+                    sakharprinter.additional_information["Awaken watchdog"].remove(async_flash_drives[0].get())
                     async_flash_drives.remove(async_flash_drives[0])
 
         except KeyboardInterrupt:
@@ -98,13 +99,13 @@ if __name__ == "__main__":
             del pool_USB_handler
             del pool_suspicious_handler
             del pool_test
-            xprint('swapping')
+            sakharprinter.xprint('swapping')
             print("Thanks for using our solution. See you soon.")
             print("Process will terminate itself give us a moment...")
             time.sleep(2)
             print("Done.")
             time.sleep(0.65)
-            canvas.display_ending()
+            sakharprinter.display_ending()
             break
 
 """ LOCAL VARIABLES """

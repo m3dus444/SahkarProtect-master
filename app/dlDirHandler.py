@@ -15,7 +15,6 @@ import os
 import getSessionUser
 import confHandler
 import canvas
-from canvas import xprint as xprint
 
 
 def administrator_privilege():
@@ -78,7 +77,6 @@ def set_chrome_corp_mode():
             return confHandler.set_chrome_config(1) #true or false
 
         except:
-            xprint()
             print(r"Couldn't get chrome to corporation mode. Try reinstalling chrome (in C:\ drive)")
             return False
 
@@ -121,7 +119,6 @@ def set_chrome_reg_keys():
             return confHandler.set_regedit_config(1)
 
         except:
-            xprint()
             print(r"/!\ Couldn't access or modify registry :( /!\ ")
             return False
 
