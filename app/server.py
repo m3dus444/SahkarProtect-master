@@ -73,9 +73,9 @@ def executeScan(cmd_arguments):
     result = subprocess.run(cmd, capture_output=True, text=True)
     stdout = result.stdout
     stderr = result.stderr
-    print(stderr)
-    print(stdout)
-    #stdout = stdout[:-4]
+    #print(stderr)
+    #print(stdout)
+    stdout = stdout[:-4]
     scan_id = json.loads(stdout)["id"]
     job_done = False
     timeout = 0
@@ -100,7 +100,7 @@ def executeSandbox(cmd_arguments):
     stderr = result.stderr
     #print(stdout)
     #print(stderr)
-    #stdout = stdout[:-4]
+    stdout = stdout[:-4]
     job_id = json.loads(stdout)["job_id"]
     job_done = False
     timeout = 0
@@ -119,7 +119,7 @@ def getSandboxState(job_id):
     result = subprocess.run(cmd, capture_output=True, text=True)
     stdout = result.stdout
     stderr = result.stderr
-    #stdout = stdout[:-4]
+    stdout = stdout[:-4]
     status = json.loads(stdout)["state"]
     return status == "SUCCESS"
 
@@ -129,7 +129,7 @@ def getSandboxSummary(job_id):
     result = subprocess.run(cmd, capture_output=True, text=True)
     stdout = result.stdout
     stderr = result.stderr
-    #stdout = stdout[:-4]
+    stdout = stdout[:-4]
     verdict = json.loads(stdout)["verdict"]
     return verdict
 
@@ -139,8 +139,8 @@ def getScanResult(scan_id):
     result = subprocess.run(cmd, capture_output=True, text=True)
     stdout = result.stdout
     stderr = result.stderr
-    print(stdout)
-    #stdout = stdout[:-4]
+    #print(stdout)
+    stdout = stdout[:-4]
     status = json.loads(stdout)
     status = status["scanners"]
     status = status[0]

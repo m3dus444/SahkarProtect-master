@@ -38,12 +38,13 @@ def checking_configuration():
 
 def start_watchdog_over_flashdrive(async_returns_USB_Handler):
     new_flashdrive = async_returns_USB_Handler.get()
-    sakharprinter.additional_information["Awaken watchdog"].append(new_flashdrive)
-    sakharprinter.additional_information["Script information"].append(eval(r"str('A new FLASH DRIVE has been plugged in : %s' % new_flashdrive')"))
+    print("A new FLASH DRIVE has been plugged in :", new_flashdrive)
 
     """ This one below works properly. But it cannot stop itself when USB is plugged out """
     async_flash_drives.append(pool_test.apply_async(
         SuspiciousHandler.start_observer, (new_flashdrive, folder_destination, folder_documents, sakharprinter)))
+    #sakharprinter.additional_information["Awaken watchdog"].append(new_flashdrive)
+    #sakharprinter.additional_information["Script information"].append(eval(r"str('A new FLASH DRIVE has been plugged in : %s' % new_flashdrive')"))
 
 
 if __name__ == "__main__":
@@ -77,7 +78,7 @@ if __name__ == "__main__":
         SuspiciousHandler.start_observer, (folder_to_track, folder_destination, folder_documents, sakharprinter))
 
     async_returns_USB_Handler = pool_USB_handler.apply_async(
-        USBHandler.looking_for_flash_drive(sakharprinter))
+        USBHandler.looking_for_flash_drive)
 
     """ MAIN LOOP """
 
@@ -86,10 +87,10 @@ if __name__ == "__main__":
             """ CHECKING FLASHDRIVE """
             if async_returns_USB_Handler.ready():
                 start_watchdog_over_flashdrive(async_returns_USB_Handler)
-                async_returns_USB_Handler = pool_USB_handler.apply_async(USBHandler.looking_for_flash_drive(sakharprinter))
+                async_returns_USB_Handler = pool_USB_handler.apply_async(USBHandler.looking_for_flash_drive)
             if len(async_flash_drives) > 0:
-                if async_flash_drives[0].ready:# this means flash drives was removed
-                    sakharprinter.additional_information["Awaken watchdog"].remove(async_flash_drives[0].get())
+                if async_flash_drives[0].ready:  # this means flash drives was removed
+                    sakharprinter.additional_information["Awaken watchdogs"].remove(async_flash_drives[0].get())
                     async_flash_drives.remove(async_flash_drives[0])
 
         except KeyboardInterrupt:

@@ -43,7 +43,6 @@ class HandleSuspicious(FileSystemEventHandler):
 
     def on_modified(self, event):
         """ This function run itself when the folder/subfolder/file in folder is moved in/ modified"""
-        print("ON MODIFIED")
         if os.path.isdir(self.folder_to_track):
             for filename in os.listdir(self.folder_to_track):
                 i = 1
@@ -80,6 +79,7 @@ class HandleSuspicious(FileSystemEventHandler):
                     self.sakharprinter.additional_information["SMA files"].append(filename)
 
                     quanrtineHandler.encrypt(self.folder_to_track, filename)
+                    print("encrypted")
                     src = self.folder_to_track + "/" + filename
                     dst = self.folder_destination + "/" + new_name
                     self.sakharprinter.add_script_info(eval(
@@ -94,12 +94,13 @@ class HandleSuspicious(FileSystemEventHandler):
                                 "quick_scan_file", None, new_name)))
                     self.sakharprinter.add_script_info(eval(r"str('Your file has been sent for SMA. You will get it back in /Documents/ once checked.\r')"))
 
+                    self.sakharprinter.xprinting('swapping')
 
         else:
             self.sakharprinter.add_script_info(eval(r"str('Watchdog CANT see the folder %s anymore! \r' % self.folder_to_track)"))
+            self.sakharprinter.xprinting('swapping')
             self.on_deleted(event) #we call on deleted in order to see what's causing this issue
 
-        self.sakharprinter.xprinting('swapping')
 
     def on_deleted(self, event):
 
