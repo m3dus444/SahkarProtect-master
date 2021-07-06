@@ -1,24 +1,17 @@
 import os
 import time
+import colorama
+from colorama import Fore, Back, Style
+colorama.init(autoreset=True)
 
-import quanrtineHandler
-import shutil
 """a = os.getcwd() + r'\configs'
 config_folder = fr"{a}"
 print(config_folder)"""
-#import SuspiciousHandler
 
-#a = os.getcwd() + r'\configs'
-#a.encode('unicode_escape')
-#print(a)
 
-"""
-print(config_folder)
-print(os.path.isdir(config_folder))
 
-print(config_folder)
-print(os.path.isdir(config_folder))
-"""
+
+
 """
 print('Total number of arguments:', format(len(sys.argv)))
 
@@ -47,6 +40,8 @@ print(c + c)
 
 """
 
+
+
 PYTHON_PATH = "D:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_5\python.exe"
 ROOT = 'C:/Users/julie/PycharmProjects/SahkarProtect-master/app'
 #raw_s = r'{}'.format(s)
@@ -54,18 +49,7 @@ ROOT = 'C:/Users/julie/PycharmProjects/SahkarProtect-master/app'
 #'C:\\Users\\julie\\PycharmProjects\\SahkarProtect-master\\app\\configs\\chrome_config.txt'
 def to_raw(string):
     return fr"{string}"
-import extensions
 
-
-def increment(x):
-    x.append(2)
-
-a = [100]
-print(isinstance(a, object))
-increment(a)
-print(a)
-print(time.time())
-print(str(time.localtime()[3]) + "h " + str(time.localtime()[4]) + "min " + str(time.localtime()[5]) + "sec ")
 
 class teton():
     d = {
@@ -77,12 +61,13 @@ class teton():
         }
     def __init__(self, var):
         self.var = var
-    def printer(self, mode):
-        if mode == 1:
-            print("yes")
 
-a = [3,7,6]
-print(len(a))
+
+myclass = teton
+for i in range (3):
+    print(i)
+
+
 
 #dir2 = r'C:\Users\julie\Desktop\fgdg2.txt'
 #dir = r'E:\\'

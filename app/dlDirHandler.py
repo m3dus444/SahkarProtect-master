@@ -14,7 +14,9 @@ import sys
 import os
 import getSessionUser
 import confHandler
-import canvas
+import colorama
+from colorama import Fore, Back, Style
+colorama.init(autoreset=True)
 
 
 def administrator_privilege():
@@ -74,10 +76,13 @@ def set_chrome_corp_mode():
                         # policy dst is windows policy dir
                         os.popen("copy " + policy_src + " " + policy_definition_folder + r"\\" + policy)
 
+            print("[" + Fore.GREEN + Style.BRIGHT + "+" + Fore.RESET + Style.RESET_ALL +
+                  "] *CHROME SUCCESSFULLY SET TO CORP MODE*")
             return confHandler.set_chrome_config(1) #true or false
 
         except:
-            print(r"Couldn't get chrome to corporation mode. Try reinstalling chrome (in C:\ drive)")
+            print("[" + Fore.RED + Style.BRIGHT + "-" + Fore.RESET + Style.RESET_ALL +
+                  "] Couldn't get chrome to corporation mode. Try reinstalling chrome (in C:\ drive)")
             return False
 
 
@@ -110,8 +115,8 @@ def set_chrome_reg_keys():
                 wreg.SetValueEx(key, 'DownloadDirectory', 0, wreg.REG_SZ, 'c:\\users\\' + username +
                                         '\\Downloads')
 
-
-            print(" *** KEYS SUCCESSFULLY ADDED TO REGISTRY ***")
+            print("[" + Fore.GREEN + Style.BRIGHT + "+" + Fore.RESET + Style.RESET_ALL +
+                  "] *KEYS SUCCESSFULLY ADDED TO REGISTRY*")
             print("    ", wreg.QueryValueEx(key, 'DefaultDownloadDirectory'))
             print("    ", wreg.QueryValueEx(key, 'DownloadDirectory'))
 
@@ -119,7 +124,8 @@ def set_chrome_reg_keys():
             return confHandler.set_regedit_config(1)
 
         except:
-            print(r"/!\ Couldn't access or modify registry :( /!\ ")
+            print("[" + Fore.RED + Style.BRIGHT + "-" + Fore.RESET + Style.RESET_ALL +
+                  r"] Couldn't access or modify registry :( ")
             return False
 
 

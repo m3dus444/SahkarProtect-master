@@ -1,5 +1,8 @@
 import os
 import time
+import colorama
+from colorama import Fore, Back, Style
+colorama.init(autoreset=True)
 
 
 class xprinter():
@@ -31,7 +34,7 @@ class xprinter():
             display_swapping(1, 1.0)
             display_canvas(1)
         elif mode == 'jump':
-            print('\n' * 20)
+            print('\n' * 80)
             display_canvas(1)
 
     def display_ending(self):
@@ -43,16 +46,35 @@ class xprinter():
             mode = 'jump'
             self.working = 1
             self.xprint(mode)
-            print("\tScript launched by:\t", self.user)
-            print("\tAt : " + str(self.execdate[0]) + "h " + str(self.execdate[1]) + "min " + str(self.execdate[2]) + "sec \t")
-            print("\tUploadServer location :\t", self.folder_destination)
-            print("\tClear file location :\t", self.folder_document)
-            print("\tAdditional informations :\n")
+            print("\t" + Fore.LIGHTCYAN_EX + Style.BRIGHT + "Script launched by :\t", self.user)
+            print("\t" + Fore.LIGHTCYAN_EX + Style.BRIGHT + "At :\t\t\t", str(self.execdate[0]), "h", str(self.execdate[1]), "min", str(self.execdate[2]), "sec\t")
+            print("\t" + Fore.LIGHTCYAN_EX + Style.BRIGHT + "UploadServer location :\t", self.folder_destination)
+            print("\t" + Fore.LIGHTCYAN_EX + Style.BRIGHT + "Clear file location :\t", self.folder_document)
+            print("\t" + Fore.LIGHTCYAN_EX + Style.BRIGHT + "Additional informations :\n")
             for additional in self.additional_information:
                 if len(self.additional_information[additional]):# != 0:
-                    print("\t•" + additional + ":")
-                    for info in self.additional_information[additional]:
-                        print("\t\t" + info)
+                    print("\t•" + Fore.LIGHTCYAN_EX + Style.BRIGHT + additional + ":")
+
+                    if additional == 'Awaken watchdogs':
+                        for info in self.additional_information[additional]:
+                            print("\t\t" + "[" + Fore.YELLOW + Style.DIM + "*" + Fore.RESET + Style.RESET_ALL + "]",
+                                  info)
+
+                    elif additional == 'Errors':
+                        for info in self.additional_information[additional]:
+                            print("\t\t" + "[" + Fore.RED + Style.BRIGHT + "-" + Fore.RESET + Style.RESET_ALL + "]",
+                                  info)
+                    elif additional == 'Analysed files':
+                        for info in self.additional_information[additional]:
+                            print("\t\t" + "[" + Fore.BLUE + Style.BRIGHT + ":" + Fore.RESET + Style.RESET_ALL + "]",
+                                  info)
+
+                    else:
+                        for info in self.additional_information[additional]:
+                            print("\t\t" + "[" + Fore.LIGHTGREEN_EX + Style.BRIGHT + "+" + Fore.RESET + Style.RESET_ALL + "]",  info)
+
+
+
             self.working = 0
             self.del_script_info() #throw all information away after printing them
         else:
@@ -89,11 +111,12 @@ def xprinttest():
             xprintcount.write("1")
 
 def xprintloading():
-    print('\n' * 40)
+    print('\n' * 80)
     display_canvas(1)
 
 def display_canvas(canvas_index):
     for pencil in canvas_room[canvas_index]:
+        #print(Fore.LIGHTCYAN_EX + Style.BRIGHT + pencil)
         print(pencil)
     print("\n")
 
@@ -101,8 +124,10 @@ def display_canvas(canvas_index):
 def display_loading(counter):
     for i in range(counter):
         for load in canvas_room[2]:
-            xprintloading()
-            print(load)
+            #xprintloading()
+            print('\n' * 40)
+            display_canvas(1)
+            print(Fore.LIGHTCYAN_EX + Style.BRIGHT + load)
             time.sleep(0.1)
 
 def display_swapping(counter, speed):
@@ -114,13 +139,6 @@ def display_swapping(counter, speed):
 """def display_ending():
     display_swapping(2, 2.0)
     display_canvas(4)"""
-
-class teee():
-    x = []
-    def __init__(self):
-        print("init")
-
-uuu = teee()
 
 canvas_room = [
     ["░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\r",

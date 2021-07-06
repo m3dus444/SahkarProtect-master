@@ -1,4 +1,4 @@
-""" This is the main function of  Sahkar Protect """
+""" This is the main function of  Sakhar Protect """
 
 import os
 import sys
@@ -10,6 +10,9 @@ import confHandler
 import dlDirHandler
 import getSessionUser
 import canvas
+import colorama
+from colorama import Fore, Back, Style
+colorama.init(autoreset=True)
 
 
 def checking_configuration():
@@ -19,15 +22,18 @@ def checking_configuration():
 
     while not chrome_configured_state or not regedit_configured_state:
         if not dlDirHandler.administrator_privilege():
-            sakharprinter.additional_information["Errors"].append("** \tAt first start, this script requires to be ran with admin privileges **\t")
+            print("[" + Fore.RED + Style.BRIGHT + "-" + Fore.RESET + Style.RESET_ALL +
+                  "] At first start, this script requires to be ran with admin privileges !\t")
             sys.exit()
         else:
-            dlDirHandler.set_chrome_corp_mode()
-            dlDirHandler.set_chrome_reg_keys()
+            chrome_configured_state = dlDirHandler.set_chrome_corp_mode()
+            regedit_configured_state = dlDirHandler.set_chrome_reg_keys()
             configuration_tries += 1
             if configuration_tries == 3:
-                sakharprinter.additional_information["Errors"].append("\tToo many config tries, something's causing a bug.\t")
+                print("[" + Fore.RED + Style.BRIGHT + "-" + Fore.RESET + Style.RESET_ALL +
+                      "] Too many config tries, something's causing a bug.\t")
                 sys.exit()
+        time.sleep(2)
 
     del chrome_configured_state
     del regedit_configured_state
@@ -36,10 +42,9 @@ def checking_configuration():
 
 def start_watchdog_over_flashdrive(async_returns_USB_Handler):
     new_flashdrive = async_returns_USB_Handler.get()
-    #print("A new FLASH DRIVE has been plugged in :", new_flashdrive)
-
     sakharprinter.additional_information["Script information"].append(
         eval(r"str('A new FLASH DRIVE has been plugged in : %s' % new_flashdrive)"))
+
     async_flash_drives.append(pool_test.apply_async(
         SuspiciousHandler.start_observer, (new_flashdrive, folder_destination, folder_documents, sakharprinter)))
 
@@ -48,9 +53,9 @@ if __name__ == "__main__":
 
     print('\n' * 40)
     canvas.display_loading(2)
+    print('\n' * 80)
 
     """ Checking configuration"""
-
     checking_configuration()
 
     """ LOCAL VARIABLES """
