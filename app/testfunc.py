@@ -81,35 +81,8 @@ class teton():
         if mode == 1:
             print("yes")
 
-a = [3,7,6,4,5,0,6,5]
-name = " JULIEN "
-x = teton(a)
-x.var.append(4)
-for time in x.var:
-    print("\t" + str(time) + "\t")
-
-print(isinstance(x, object))
-x.printer(1)
-
-for additional in x.d:
-    print(additional + ":")
-    for info in x.d[additional]:
-        print(info  +"\r")
-print(a)
-addinfo = []
-#addinfo.append(eval(print(("The nameis so : ", name))))
-print(addinfo)
-
-addinfo.append(eval(r"str('The letter %s is a beautiful watchdog ! \n' %x.d['watchdog'][0])"))
-#val("The name %s is a beautiful name ! %name")
-print(2)
-print(addinfo[0])
-if x.printer(1):
-    print("nooo")
-
-
-kk = r"E:\\"
-print(format(kk, ))
+a = [3,7,6]
+print(len(a))
 
 #dir2 = r'C:\Users\julie\Desktop\fgdg2.txt'
 #dir = r'E:\\'

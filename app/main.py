@@ -2,7 +2,6 @@
 
 import os
 import sys
-#sys.path.insert(0,'C:/Users/julie/PycharmProjects/SahkarProtect-master/app')
 import time
 from multiprocessing.pool import ThreadPool
 import SuspiciousHandler
@@ -11,7 +10,6 @@ import confHandler
 import dlDirHandler
 import getSessionUser
 import canvas
-#from canvas import xprint as xprint
 
 
 def checking_configuration():
@@ -38,13 +36,12 @@ def checking_configuration():
 
 def start_watchdog_over_flashdrive(async_returns_USB_Handler):
     new_flashdrive = async_returns_USB_Handler.get()
-    print("A new FLASH DRIVE has been plugged in :", new_flashdrive)
+    #print("A new FLASH DRIVE has been plugged in :", new_flashdrive)
 
-    """ This one below works properly. But it cannot stop itself when USB is plugged out """
+    sakharprinter.additional_information["Script information"].append(
+        eval(r"str('A new FLASH DRIVE has been plugged in : %s' % new_flashdrive)"))
     async_flash_drives.append(pool_test.apply_async(
         SuspiciousHandler.start_observer, (new_flashdrive, folder_destination, folder_documents, sakharprinter)))
-    #sakharprinter.additional_information["Awaken watchdog"].append(new_flashdrive)
-    #sakharprinter.additional_information["Script information"].append(eval(r"str('A new FLASH DRIVE has been plugged in : %s' % new_flashdrive')"))
 
 
 if __name__ == "__main__":
@@ -68,9 +65,6 @@ if __name__ == "__main__":
     folder_device = ''
     sakharprinter = canvas.xprinter(folder_destination, folder_documents, getSessionUser.getuser(0), time.localtime())
 
-    """ SCRIPT INFORMATION"""
-    sakharprinter.xprinting('swapping')
-    time.sleep(2)
 
     """ LAUNCHING PROCESSES """
 
@@ -92,6 +86,7 @@ if __name__ == "__main__":
                 if async_flash_drives[0].ready:  # this means flash drives was removed
                     sakharprinter.additional_information["Awaken watchdogs"].remove(async_flash_drives[0].get())
                     async_flash_drives.remove(async_flash_drives[0])
+                    sakharprinter.xprinting('swapping')
 
         except KeyboardInterrupt:
             pool_USB_handler.terminate()
@@ -104,20 +99,6 @@ if __name__ == "__main__":
             print("Process will terminate itself give us a moment...")
             time.sleep(2)
             print("Done.")
-            time.sleep(0.65)
-            sakharprinter.display_ending()
+            """time.sleep(0.65)
+            sakharprinter.display_ending()"""
             break
-
-""" LOCAL VARIABLES """
-
-
-
-r"""pool_suspicious_handler = ThreadPool(processes=4)
-pool_USB_handler = ThreadPool(processes=2)
-pool_test = ThreadPool(processes=2)
-
-folder_to_track = SuspiciousHandler.getdownloadfolder()
-folder_destination = os.getcwd() + r'\uploadServer'
-folder_documents = r'C:\users\\' + getSessionUser.getuser(0) + r'\Documents'
-folder_device = ''
-"""

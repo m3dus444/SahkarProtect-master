@@ -1,20 +1,11 @@
 import os
 import time
-import SuspiciousHandler
-
-"""def xprint(mode):
-    time.sleep(0.1)
-    if mode == 'swapping':
-        display_swapping(1, 1.0)
-    elif mode == 'jump':
-        print('\n' * 10)
-    display_canvas(1)"""
 
 
 class xprinter():
     additional_information = {
-            "Script information": [],
             "Awaken watchdogs": [],
+            "Script information": [],
             "Scuffed files": [],
             "SMA files": [],
             "DMA files": [],
@@ -40,7 +31,7 @@ class xprinter():
             display_swapping(1, 1.0)
             display_canvas(1)
         elif mode == 'jump':
-            print('\n' * 10)
+            print('\n' * 20)
             display_canvas(1)
 
     def display_ending(self):
@@ -48,7 +39,8 @@ class xprinter():
         display_canvas(4)
 
     def xprinting(self, mode):
-        if not self.working :
+        if not self.working:
+            mode = 'jump'
             self.working = 1
             self.xprint(mode)
             print("\tScript launched by:\t", self.user)
@@ -64,7 +56,7 @@ class xprinter():
             self.working = 0
             self.del_script_info() #throw all information away after printing them
         else:
-            print("working")
+            time.sleep(0.1)
             self.xprinting(mode)
     def add_script_info(self, info):
         self.additional_information["Script information"].append(info)
