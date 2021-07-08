@@ -48,7 +48,8 @@ class HandleSuspicious(FileSystemEventHandler):
                 i = 1
                 if filename != self.folder_to_track and filename != 'System Volume Information' and filename not in \
                         self.scuffed_files_SMA and '.skp' != os.path.splitext(filename)[1] and \
-                        os.path.splitext(filename)[1] in extensions.untrusted_extensions:
+                        os.path.splitext(filename)[1] in extensions.untrusted_extensions and \
+                        '.part' != os.path.splitext(filename)[1]:
 
                     new_name = filename
                     self.sakharprinter.add_script_info(eval(r"str('New suspect file is scuffed : ' + filename)"))
@@ -182,7 +183,7 @@ class HandleSuspicious(FileSystemEventHandler):
             else:
                 if keepquarantine == 1:
 
-                    os.remove(getdownloadfolder() + r"\\" + self.scuffed_files_SMA[0] + '.skp')
+                    os.remove(self.folder_to_track + r"\\" + self.scuffed_files_SMA[0] + '.skp')
                     os.remove(os.getcwd() + r"\\encryption\quarantineKey_" + self.scuffed_files_SMA[0] + '.skk')
                     quanrtineHandler.encrypt(os.getcwd() + r"\\uploadServer\\", self.scuffed_files_SMA[1])
 
@@ -229,7 +230,7 @@ class HandleSuspicious(FileSystemEventHandler):
             elif keepquarantine == 1:
                 self.sakharprinter.add_script_info(
                     eval(r"str('Your file %s turned to be a Ransomware/Malware !\r' % self.scuffed_files_DMA[0])"))
-                os.remove(getdownloadfolder() + r"\\" + self.scuffed_files_DMA[0])
+                os.remove(self.folder_to_track + r"\\" + self.scuffed_files_DMA[0])
                 os.remove(os.getcwd() + r"\\encryption\quarantineKey_" + self.scuffed_files_DMA[0] + '.skk')
                 quanrtineHandler.encrypt(os.getcwd() + r"\\uploadServer\\", self.scuffed_files_DMA[1])
 

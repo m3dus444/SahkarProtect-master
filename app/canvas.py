@@ -34,7 +34,7 @@ class xprinter():
             display_swapping(1, 1.0)
             display_canvas(1)
         elif mode == 'jump':
-            print('\n' * 80)
+            print('\n' * 125)
             display_canvas(1)
 
     def display_ending(self):
