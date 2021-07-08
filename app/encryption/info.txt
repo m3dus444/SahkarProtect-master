@@ -1,0 +1,2 @@
+-- INFO --
+this directory store the keys to encrypt/decrypt files.
