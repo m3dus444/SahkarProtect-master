@@ -9,6 +9,7 @@ Get a DB of Malware here : https://github.com/Endermanch/MalwareDatabase
 
 To install Sakhar protect, please follow instructions bellow :  
 -get latest Python version : Python 3.9.5.  
+-get latest version of chrome : https://www.google.fr/chrome/thank-you.html?brand=CHBF&statcb=1&installdataindex=empty&defaultbrowser=0  
 -move to `/SakharProtect-master/`  
 -install requirements : `python -m pip install requirements.txt`.   
 -move to `/SakharProtect-matser/app` and run : `python ./main.py` with Admin privilege.  
