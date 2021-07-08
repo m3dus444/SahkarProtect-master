@@ -7,7 +7,7 @@ Chrome is set to org. mod to disable users moving their download folder. This is
 
 Get a DB of Malware here : https://github.com/Endermanch/MalwareDatabase
 
-To install Sakhar protect, please follow instructions bellow : 
+To install Sakhar protect, please follow instructions bellow : \n
 -get latest Python version : Python 3.9.5. 
 -move to `/SakharProtect-master/`
 -install requirements : `python -m pip install requirements.txt`.  
