@@ -131,7 +131,6 @@ def getSandboxSummary(job_id):
     stderr = result.stderr
     #stdout = stdout[:-4]
     verdict = json.loads(stdout)["verdict"]
-    print(verdict)
     return verdict
 
 
